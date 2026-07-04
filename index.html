@@ -1,17 +1,15 @@
-<script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@1.7.0/dist/index.umd.min.js">
-</script>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏸 排兵布阵 - 云开发版</title>
-    <script src="https://res.wx.qq.com/open/js/cloudbase/1.1.0/cloud.js">
+    <title>🏸 排兵布阵系统</title>
+    <!-- 使用稳定的 CDN 地址 -->
+    <script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@1.7.0/dist/index.umd.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
     </script>
     <style>
-        /* ===== 样式 ===== */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -72,12 +70,6 @@
         .text-sm {
             font-size: 13px;
         }
-        .text-success {
-            color: #38a169;
-        }
-        .text-danger {
-            color: #e53e3e;
-        }
         .hidden {
             display: none !important;
         }
@@ -97,7 +89,6 @@
                 grid-template-columns: 1fr;
             }
         }
-
         .form-group {
             margin-bottom: 14px;
         }
@@ -122,7 +113,6 @@
             border-color: #4299e1;
             outline: none;
         }
-
         .btn {
             padding: 10px 22px;
             border: none;
@@ -189,7 +179,6 @@
         .btn-warning:hover {
             background: #dd6b20;
         }
-
         .team-selector {
             display: flex;
             gap: 10px;
@@ -232,7 +221,6 @@
         .team-tab .delete-team-btn:hover {
             color: #e53e3e;
         }
-
         .member-tag {
             display: inline-flex;
             align-items: center;
@@ -269,7 +257,6 @@
         .member-tag .remove-btn:hover {
             color: #e53e3e;
         }
-
         .member-list {
             min-height: 60px;
             background: #f7fafc;
@@ -287,7 +274,6 @@
             padding: 16px 0;
             font-size: 14px;
         }
-
         .tab-bar {
             display: flex;
             gap: 8px;
@@ -310,7 +296,6 @@
         .tab:hover:not(.active) {
             background: #e2e8f0;
         }
-
         .toast {
             position: fixed;
             bottom: 30px;
@@ -331,7 +316,6 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
-
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -341,7 +325,6 @@
             font-size: 48px;
             margin-bottom: 12px;
         }
-
         .badge {
             display: inline-block;
             padding: 2px 10px;
@@ -361,7 +344,6 @@
             background: #e9d8fd;
             color: #6b46c1;
         }
-
         .modal-overlay {
             display: none;
             position: fixed;
@@ -386,7 +368,6 @@
             max-height: 90vh;
             overflow-y: auto;
         }
-
         .lineup-step-card {
             background: #f7fafc;
             border-radius: 12px;
@@ -442,7 +423,6 @@
             color: #e53e3e;
             margin-top: 6px;
         }
-
         .member-select-grid {
             display: flex;
             flex-wrap: wrap;
@@ -474,7 +454,6 @@
             opacity: 0.4;
             cursor: not-allowed;
         }
-
         .court-slots {
             display: flex;
             gap: 20px;
@@ -507,7 +486,6 @@
             font-size: 18px;
             color: #2d3748;
         }
-
         .qr-box {
             display: flex;
             flex-direction: column;
@@ -533,7 +511,6 @@
             background: white;
             font-size: 13px;
         }
-
         .fill-container .step-indicator {
             display: flex;
             justify-content: center;
@@ -560,7 +537,6 @@
             background: #48bb78;
             color: white;
         }
-
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -576,7 +552,6 @@
             padding: 8px 12px;
             border-bottom: 1px solid #e2e8f0;
         }
-
         .gender-select-group {
             display: flex;
             gap: 12px;
@@ -609,7 +584,6 @@
             opacity: 0.4;
             cursor: not-allowed;
         }
-
         .data-update-banner {
             background: #ebf8ff;
             border: 1px solid #bee3f8;
@@ -630,8 +604,6 @@
             color: #718096;
             font-size: 13px;
         }
-
-        /* 连接状态 */
         .connection-status {
             display: inline-flex;
             align-items: center;
@@ -813,46 +785,68 @@
 
     <script>
         // ============================================================
-        //  ===== 云开发配置（请修改你的环境ID） =====
+        //  ===== 云开发配置 =====
         // ============================================================
-        var ENV_ID = 'sunlion-1-d3g7qiwbv2dcdfb51'; // ⚠️ 替换成你的环境ID
+        var ENV_ID = 'sunlion-1-d3g7qiwbv2dcdfb51';
 
         // ============================================================
-        //  ===== 云开发初始化 =====
+        //  ===== 等待 SDK 加载完成后初始化 =====
         // ============================================================
         var app = null;
         var db = null;
         var isCloudReady = false;
 
+        function waitForSDK(callback, retries) {
+            retries = retries || 0;
+            if (typeof cloudbase !== 'undefined') {
+                callback();
+                return;
+            }
+            if (retries > 20) {
+                console.error('❌ SDK 加载超时');
+                updateConnectionStatus(false, 'SDK加载超时');
+                return;
+            }
+            setTimeout(function() {
+                waitForSDK(callback, retries + 1);
+            }, 500);
+        }
+
         function initCloud() {
-    try {
-        // 兼容不同 SDK 版本
-        if (typeof cloudbase !== 'undefined') {
-            app = cloudbase.init({ env: ENV_ID });
-        } else if (typeof tcb !== 'undefined') {
-            app = tcb.init({ env: ENV_ID });
-        } else {
-            // 尝试从 window 对象获取
-            var CloudBase = window.cloudbase || window.tcb;
-            if (CloudBase) {
-                app = CloudBase.init({ env: ENV_ID });
-            } else {
-                console.error('❌ 云开发 SDK 未加载');
-                updateConnectionStatus(false, 'SDK未加载');
+            try {
+                if (typeof cloudbase === 'undefined') {
+                    console.log('⏳ 等待 SDK 加载...');
+                    updateConnectionStatus(false, '加载SDK...');
+                    waitForSDK(function() {
+                        doInitCloud();
+                    });
+                    return false;
+                }
+                return doInitCloud();
+            } catch (e) {
+                console.error('❌ 初始化失败:', e);
+                updateConnectionStatus(false, '连接失败');
                 return false;
             }
         }
-        db = app.database();
-        isCloudReady = true;
-        updateConnectionStatus(true, '已连接');
-        console.log('✅ 云开发初始化成功');
-        return true;
-    } catch (e) {
-        console.error('❌ 云开发初始化失败:', e);
-        updateConnectionStatus(false, '连接失败');
-        return false;
-    }
-}
+
+        function doInitCloud() {
+            try {
+                app = cloudbase.init({ env: ENV_ID });
+                db = app.database();
+                isCloudReady = true;
+                updateConnectionStatus(true, '已连接');
+                console.log('✅ 云开发初始化成功');
+                // 同步数据
+                syncFromCloud();
+                return true;
+            } catch (e) {
+                console.error('❌ 云开发初始化失败:', e);
+                updateConnectionStatus(false, '连接失败');
+                return false;
+            }
+        }
+
         function updateConnectionStatus(connected, msg) {
             var el = document.getElementById('connectionStatus');
             if (!el) return;
@@ -864,7 +858,6 @@
         //  ===== 云数据库操作 =====
         // ============================================================
 
-        // 获取所有团队
         async function fetchTeams() {
             if (!isCloudReady) return [];
             try {
@@ -876,7 +869,6 @@
             }
         }
 
-        // 添加团队
         async function addTeamToCloud(name) {
             if (!isCloudReady) {
                 showToast('⚠️ 云开发未连接');
@@ -896,7 +888,6 @@
             }
         }
 
-        // 更新团队
         async function updateTeamInCloud(teamId, data) {
             if (!isCloudReady) return false;
             try {
@@ -908,12 +899,10 @@
             }
         }
 
-        // 删除团队
         async function deleteTeamFromCloud(teamId) {
             if (!isCloudReady) return false;
             try {
                 await db.collection('teams').doc(teamId).remove();
-                // 同时删除排阵数据
                 await db.collection('lineups').where({ teamId: teamId }).remove();
                 return true;
             } catch (e) {
@@ -922,7 +911,6 @@
             }
         }
 
-        // 获取排阵数据
         async function fetchLineup(teamId) {
             if (!isCloudReady) return null;
             try {
@@ -934,7 +922,6 @@
             }
         }
 
-        // 保存排阵数据
         async function saveLineupToCloud(teamId, lineupData) {
             if (!isCloudReady) return false;
             try {
@@ -985,20 +972,15 @@
             localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify(data));
         }
 
-        // 从云端同步到本地
         async function syncFromCloud() {
             if (!isCloudReady) {
-                showToast('⚠️ 云开发未连接');
                 return;
             }
-
-            showToast('⏳ 同步中...');
 
             try {
                 var teams = await fetchTeams();
                 var cache = { teams: teams, lineups: {} };
 
-                // 获取所有团队的排阵
                 for (var i = 0; i < teams.length; i++) {
                     var lineup = await fetchLineup(teams[i]._id);
                     if (lineup) {
@@ -1013,7 +995,6 @@
 
                 saveCache(cache);
 
-                // 更新当前团队ID
                 var config = getConfig();
                 if (teams.length > 0) {
                     var found = false;
@@ -1030,10 +1011,8 @@
                 }
 
                 renderAll();
-                showToast('✅ 同步成功');
             } catch (e) {
                 console.error('同步失败:', e);
-                showToast('⚠️ 同步失败: ' + e.message);
             }
         }
 
@@ -1197,7 +1176,6 @@
                 return;
             }
 
-            // 检查是否已存在同名团队
             var cache = getCachedData();
             for (var i = 0; i < cache.teams.length; i++) {
                 if (cache.teams[i].name === name) {
@@ -1287,7 +1265,6 @@
 
             try {
                 await updateTeamInCloud(team._id, { members: members });
-                // 清空排阵缓存
                 var cache = getCachedData();
                 if (cache.lineups[team._id]) {
                     delete cache.lineups[team._id];
@@ -1445,7 +1422,7 @@
         }
 
         // ============================================================
-        //  ===== 排阵填报（简化版，保留核心功能） =====
+        //  ===== 排阵填报 =====
         // ============================================================
         var selectedReplaceGender = null;
         var selectedFillPlayers = [];
@@ -2051,7 +2028,6 @@
                     var data = JSON.parse(e.target.result);
                     if (data.teams) {
                         if (confirm('导入将覆盖云端数据，确认？')) {
-                            // 这里需要逐条导入到云端
                             showToast('⚠️ 请使用「同步」功能导入');
                         }
                     } else {
@@ -2530,7 +2506,6 @@
                 fillData.completed = true;
             }
 
-            // 保存到云端
             try {
                 await saveLineupToCloud(team.teamId, fillData);
                 captainSelected = [];
@@ -2599,25 +2574,10 @@
         async function init() {
             console.log('🚀 初始化开始...');
 
-            // 1. 初始化云开发
-            var connected = initCloud();
+            // 初始化云开发
+            initCloud();
 
-            // 2. 从云端同步数据
-            if (connected) {
-                await syncFromCloud();
-            } else {
-                // 如果云开发未连接，尝试从缓存加载
-                var cache = getCachedData();
-                if (cache.teams.length > 0) {
-                    renderAll();
-                    showToast('⚠️ 使用本地缓存数据');
-                } else {
-                    renderAll();
-                    showToast('⚠️ 云开发未连接，请检查配置');
-                }
-            }
-
-            // 3. 检查扫码填报模式
+            // 检查扫码填报模式
             var isFillMode = initFillMode();
 
             if (!isFillMode) {
@@ -2656,7 +2616,6 @@
         window.renderFillPage = renderFillPage;
         window.renderMembers = renderMembers;
         window.renderTeams = renderTeams;
-        // 队长端函数
         window.captainSelectGender = captainSelectGender;
         window.captainSelectPlayer = captainSelectPlayer;
         window.captainConfirmStep = captainConfirmStep;
