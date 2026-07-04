@@ -1,4 +1,4 @@
-<script src="https://res.wx.qq.com/open/js/cloudbase/1.1.0/cloud.js">
+<script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@1.7.0/dist/index.umd.min.js">
 </script>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -825,22 +825,34 @@
         var isCloudReady = false;
 
         function initCloud() {
-            try {
-                app = cloudbase.init({
-                    env: ENV_ID
-                });
-                db = app.database();
-                isCloudReady = true;
-                updateConnectionStatus(true, '已连接');
-                console.log('✅ 云开发初始化成功');
-                return true;
-            } catch (e) {
-                console.error('❌ 云开发初始化失败:', e);
-                updateConnectionStatus(false, '连接失败');
+    try {
+        // 兼容不同 SDK 版本
+        if (typeof cloudbase !== 'undefined') {
+            app = cloudbase.init({ env: ENV_ID });
+        } else if (typeof tcb !== 'undefined') {
+            app = tcb.init({ env: ENV_ID });
+        } else {
+            // 尝试从 window 对象获取
+            var CloudBase = window.cloudbase || window.tcb;
+            if (CloudBase) {
+                app = CloudBase.init({ env: ENV_ID });
+            } else {
+                console.error('❌ 云开发 SDK 未加载');
+                updateConnectionStatus(false, 'SDK未加载');
                 return false;
             }
         }
-
+        db = app.database();
+        isCloudReady = true;
+        updateConnectionStatus(true, '已连接');
+        console.log('✅ 云开发初始化成功');
+        return true;
+    } catch (e) {
+        console.error('❌ 云开发初始化失败:', e);
+        updateConnectionStatus(false, '连接失败');
+        return false;
+    }
+}
         function updateConnectionStatus(connected, msg) {
             var el = document.getElementById('connectionStatus');
             if (!el) return;
