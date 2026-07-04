@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🏸 排兵布阵系统</title>
-    <!-- 使用稳定的 CDN 地址 -->
+    <!-- 使用腾讯云官方 CDN -->
     <script src="https://tcb-sdk-1256587118.cos.ap-guangzhou.myqcloud.com/1.7.0/index.umd.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
@@ -790,36 +790,26 @@
         var ENV_ID = 'sunlion-1-d3g7qiwbv2dcdfb51';
 
         // ============================================================
-        //  ===== 等待 SDK 加载完成后初始化 =====
+        //  ===== 云开发初始化 =====
         // ============================================================
         var app = null;
         var db = null;
         var isCloudReady = false;
 
-        function waitForSDK(callback, retries) {
-            retries = retries || 0;
-            if (typeof cloudbase !== 'undefined') {
-                callback();
-                return;
-            }
-            if (retries > 20) {
-                console.error('❌ SDK 加载超时');
-                updateConnectionStatus(false, 'SDK加载超时');
-                return;
-            }
-            setTimeout(function() {
-                waitForSDK(callback, retries + 1);
-            }, 500);
-        }
-
         function initCloud() {
             try {
+                // 检查 SDK 是否加载
                 if (typeof cloudbase === 'undefined') {
-                    console.log('⏳ 等待 SDK 加载...');
-                    updateConnectionStatus(false, '加载SDK...');
-                    waitForSDK(function() {
-                        doInitCloud();
-                    });
+                    console.error('❌ cloudbase SDK 未加载，尝试等待...');
+                    // 等待 SDK 加载
+                    setTimeout(function() {
+                        if (typeof cloudbase !== 'undefined') {
+                            doInitCloud();
+                        } else {
+                            updateConnectionStatus(false, 'SDK加载失败');
+                            showToast('⚠️ 云开发SDK加载失败，请刷新重试');
+                        }
+                    }, 2000);
                     return false;
                 }
                 return doInitCloud();
