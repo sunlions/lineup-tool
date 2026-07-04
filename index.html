@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏸 排兵布阵 - 扫码填报系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
+    </script>
+    <style>
+        /* ========== 样式（与之前相同，为节省篇幅省略，实际使用时保留完整样式） ========== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f0f4f8;
+            padding: 16px;
+            min-height: 100vh;
+        }
+        .app {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .flex {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        h1 {
+            font-size: 26px;
+            color: #1a202c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h2 {
+            font-size: 18px;
+            color: #2d3748;
+            margin-bottom: 12px;
+        }
+        h3 {
+            font-size: 15px;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #718096;
+            font-size: 14px;
+        }
+        .text-muted {
+            color: #718096;
+            font-size: 14px;
+        }
+        .text-sm {
+            font-size: 13px;
+        }
+        .text-success {
+            color: #38a169;
+        }
+        .text-danger {
+            color: #e53e3e;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .mt-12 {
+            margin-top: 12px;
+        }
+        .mb-12 {
+            margin-bottom: 12px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        input,
+        select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: 0.2s;
+            background: white;
+        }
+        input:focus,
+        select:focus {
+            border-color: #4299e1;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-primary {
+            background: #4299e1;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #3182ce;
+        }
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #38a169;
+        }
+        .btn-danger {
+            background: #fc8181;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #f56565;
+        }
+        .btn-warning {
+            background: #ed8936;
+            color: white;
+        }
+        .btn-warning:hover {
+            background: #dd6b20;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #e2e8f0;
+            color: #4a5568;
+        }
+        .btn-outline:hover {
+            background: #f7fafc;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 13px;
+        }
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-purple {
+            background: #9f7aea;
+            color: white;
+        }
+        .btn-purple:hover {
+            background: #805ad5;
+        }
+
+        .team-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .team-tab {
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            background: #edf2f7;
+            font-weight: 500;
+            transition: 0.2s;
+            border: 2px solid transparent;
+            font-size: 14px;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .team-tab:hover {
+            background: #e2e8f0;
+        }
+        .team-tab.active {
+            background: #4299e1;
+            color: white;
+            border-color: #4299e1;
+        }
+        .team-tab .count {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-left: 4px;
+        }
+        .team-tab .delete-team-btn {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 2px;
+            line-height: 1;
+            margin-left: 2px;
+        }
+        .team-tab .delete-team-btn:hover {
+            color: #e53e3e;
+        }
+        .team-tab.active .delete-team-btn {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .team-tab.active .delete-team-btn:hover {
+            color: #fff;
+        }
+
+        .member-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #edf2f7;
+            padding: 6px 14px 6px 18px;
+            border-radius: 20px;
+            margin: 4px 6px 4px 0;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        .member-tag:hover {
+            background: #e2e8f0;
+        }
+        .member-tag .gender-badge {
+            font-size: 11px;
+            padding: 1px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+        .gender-m {
+            background: #bee3f8;
+            color: #2b6cb0;
+        }
+        .gender-f {
+            background: #fbb6ce;
+            color: #b83280;
+        }
+        .member-tag .remove-btn {
+            cursor: pointer;
+            color: #a0aec0;
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 1;
+            background: none;
+            border: none;
+            padding: 0 4px;
+        }
+        .member-tag .remove-btn:hover {
+            color: #e53e3e;
+        }
+
+        .member-list {
+            min-height: 60px;
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 4px;
+        }
+        .member-list .empty {
+            width: 100%;
+            text-align: center;
+            color: #a0aec0;
+            padding: 16px 0;
+            font-size: 14px;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 8px 22px;
+            border-radius: 20px;
+            cursor: pointer;
+            background: #edf2f7;
+            font-weight: 500;
+            transition: 0.2s;
+            border: none;
+            font-size: 14px;
+        }
+        .tab.active {
+            background: #4299e1;
+            color: white;
+        }
+        .tab:hover:not(.active) {
+            background: #e2e8f0;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #1a202c;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 500;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+            z-index: 999;
+            font-size: 14px;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #a0aec0;
+        }
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-blue {
+            background: #bee3f8;
+            color: #2b6cb0;
+        }
+        .badge-green {
+            background: #c6f6d5;
+            color: #276749;
+        }
+        .badge-purple {
+            background: #e9d8fd;
+            color: #6b46c1;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .lineup-step-card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #4299e1;
+        }
+        .lineup-step-card .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .lineup-step-card .step-number {
+            font-weight: 700;
+            font-size: 16px;
+            color: #2d3748;
+        }
+        .lineup-step-card .step-action {
+            font-size: 13px;
+            padding: 2px 12px;
+            border-radius: 12px;
+            background: #ebf8ff;
+            color: #2b6cb0;
+        }
+        .lineup-step-card .step-action.start {
+            background: #c6f6d5;
+            color: #276749;
+        }
+        .lineup-step-card .court-players {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .lineup-step-card .court-player {
+            background: white;
+            padding: 6px 18px;
+            border-radius: 12px;
+            border: 2px solid #4299e1;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .lineup-step-card .court-player.male {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+        .lineup-step-card .court-player.female {
+            border-color: #ed64a6;
+            background: #fff5f7;
+        }
+        .lineup-step-card .sub-info {
+            font-size: 13px;
+            color: #e53e3e;
+            margin-top: 6px;
+        }
+
+        .member-select-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 10px;
+            min-height: 60px;
+        }
+        .member-select-grid .member-option {
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            background: white;
+            border: 2px solid #e2e8f0;
+            font-size: 14px;
+            transition: 0.2s;
+            user-select: none;
+        }
+        .member-select-grid .member-option:hover:not(.disabled) {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+        .member-select-grid .member-option.selected {
+            border-color: #4299e1;
+            background: #4299e1;
+            color: white;
+        }
+        .member-select-grid .member-option.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .court-slots {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+        .court-slot {
+            background: white;
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 10px 24px;
+            min-width: 100px;
+            text-align: center;
+            transition: 0.2s;
+            flex: 1;
+        }
+        .court-slot.filled {
+            border-style: solid;
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+        .court-slot .slot-label {
+            font-size: 12px;
+            color: #a0aec0;
+        }
+        .court-slot .slot-name {
+            font-weight: 700;
+            font-size: 18px;
+            color: #2d3748;
+        }
+
+        .qr-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 16px;
+        }
+        #qrcode {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+        }
+        .share-link {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 450px;
+        }
+        .share-link input {
+            flex: 1;
+            background: white;
+            font-size: 13px;
+        }
+
+        .fill-container .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .fill-container .step-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #edf2f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            color: #a0aec0;
+        }
+        .fill-container .step-dot.active {
+            background: #4299e1;
+            color: white;
+        }
+        .fill-container .step-dot.done {
+            background: #48bb78;
+            color: white;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .data-table th {
+            background: #f7fafc;
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .data-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .data-table tr:hover td {
+            background: #f7fafc;
+        }
+
+        .delete-confirm-box .warning-icon {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .delete-confirm-box .warning-text {
+            text-align: center;
+            color: #e53e3e;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .delete-confirm-box .detail-text {
+            text-align: center;
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .url-box {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+            word-break: break-all;
+        }
+        .url-box .url-text {
+            font-size: 13px;
+            color: #2d3748;
+            font-family: monospace;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-top: 6px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .url-size-info {
+            font-size: 13px;
+            color: #718096;
+            margin-top: 8px;
+        }
+        .url-size-info strong {
+            color: #2d3748;
+        }
+
+        /* 性别选择按钮 */
+        .gender-select-group {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .gender-select-group .gender-btn {
+            padding: 8px 24px;
+            border-radius: 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.2s;
+            flex: 1;
+        }
+        .gender-select-group .gender-btn:hover {
+            border-color: #4299e1;
+        }
+        .gender-select-group .gender-btn.active-male {
+            border-color: #4299e1;
+            background: #ebf8ff;
+            color: #2b6cb0;
+        }
+        .gender-select-group .gender-btn.active-female {
+            border-color: #ed64a6;
+            background: #fff5f7;
+            color: #b83280;
+        }
+        .gender-select-group .gender-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app" id="app">
+        <div class="toast" id="toast"></div>
+
+        <!-- Header -->
+        <div class="card">
+            <div class="flex-between">
+                <div>
+                    <h1>🏸 排兵布阵系统</h1>
+                    <p class="subtitle">管理员后台 · 扫码填报出场名单</p>
+                </div>
+                <div class="flex">
+                    <button class="btn btn-purple btn-sm" onclick="showShareURLModal()">🔗 分享URL</button>
+                    <button class="btn btn-outline btn-sm" onclick="exportAllData()">💾 导出数据</button>
+                    <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()">📥 导入</button>
+                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+                </div>
+            </div>
+        </div>
+
+        <!-- 团队切换 -->
+        <div class="card">
+            <div class="flex-between">
+                <div class="team-selector" id="teamSelector"></div>
+                <button class="btn btn-primary btn-sm" onclick="showAddTeamModal()">➕ 新建团队</button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tab-bar">
+            <button class="tab active" data-tab="members" onclick="switchTab('members')">👥 成员管理</button>
+            <button class="tab" data-tab="fill" onclick="switchTab('fill')">📝 填报排阵</button>
+            <button class="tab" data-tab="data" onclick="switchTab('data')">📊 数据导出</button>
+            <button class="tab" data-tab="share" onclick="switchTab('share')">📱 二维码</button>
+        </div>
+
+        <!-- ==================== TAB 1: 成员管理 ==================== -->
+        <div class="card" id="tab-members">
+            <div class="grid-2">
+                <div>
+                    <h2>➕ 添加成员</h2>
+                    <p class="subtitle" style="margin-bottom:12px;">当前团队：<strong id="currentTeamName">-</strong></p>
+                    <div class="form-group">
+                        <label>👤 姓名</label>
+                        <input type="text" id="memberName" placeholder="输入姓名" onkeydown="if(event.key==='Enter'){event.preventDefault();addMember();}">
+                    </div>
+                    <div class="form-group">
+                        <label>⚧ 性别</label>
+                        <select id="memberGender">
+                            <option value="male">♂ 男</option>
+                            <option value="female">♀ 女</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="addMember()">➕ 添加成员</button>
+                    <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="btn btn-sm btn-outline" onclick="loadExample()">📥 示例数据</button>
+                        <button class="btn btn-sm btn-danger" onclick="clearTeamMembers()">🗑 清空本队</button>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex-between mb-12">
+                        <span style="font-weight:600; color:#2d3748;">成员列表 · <span id="memberCount">0</span> 人</span>
+                        <span class="text-muted" id="genderStats">👨 0 · 👩 0</span>
+                    </div>
+                    <div class="member-list" id="memberList">
+                        <div class="empty">还没有成员，添加一些吧</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 2: 填报排阵 ==================== -->
+        <div class="card hidden" id="tab-fill">
+            <div class="flex-between mb-12">
+                <h2>📝 填报出场名单</h2>
+                <div class="flex">
+                    <span class="text-muted text-sm">当前团队：<strong id="fillTeamName">-</strong></span>
+                    <button class="btn btn-danger btn-sm" onclick="resetFillData()">🔄 重置填报</button>
+                </div>
+            </div>
+            <div id="fillContainer">
+                <div class="empty-state">
+                    <div class="icon">📝</div>
+                    <p>请先在「成员管理」中添加团队成员</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 3: 数据导出 ==================== -->
+        <div class="card hidden" id="tab-data">
+            <div class="flex-between mb-12">
+                <h2>📊 已填报数据</h2>
+                <div class="flex">
+                    <button class="btn btn-success btn-sm" onclick="exportFillDataCSV()">📥 导出CSV</button>
+                    <button class="btn btn-outline btn-sm" onclick="exportFillDataJSON()">📄 导出JSON</button>
+                </div>
+            </div>
+            <div id="dataContainer">
+                <div class="empty-state">
+                    <div class="icon">📊</div>
+                    <p>暂无填报数据</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 4: 二维码 ==================== -->
+        <div class="card hidden" id="tab-share">
+            <p class="text-muted" style="margin-bottom:16px;">生成二维码，团队长扫码即可填报出场名单</p>
+            <div class="qr-box">
+                <div id="qrcode"></div>
+                <div class="share-link">
+                    <input type="text" id="shareLink" readonly placeholder="生成二维码后显示链接">
+                    <button class="btn btn-primary" onclick="copyShareLink()">📋 复制</button>
+                </div>
+                <button class="btn btn-success" onclick="generateShareQR()">🔄 生成填报二维码</button>
+            </div>
+            <div class="mt-12" style="background:#ebf8ff; padding:14px 18px; border-radius:12px; border-left:4px solid #4299e1;">
+                <p style="font-size:14px; color:#2b6cb0;">
+                    💡 扫码后进入填报页面，按规则选择出场阵容。<br>
+                    规则：首发1男1女 → 之后每次选择换下男或女，然后从未上场的同性别队员中选1人替补。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 新建团队弹窗 ==================== -->
+    <div class="modal-overlay" id="addTeamModal">
+        <div class="modal-box">
+            <h2 style="margin-bottom:8px;">🏷️ 新建团队</h2>
+            <p class="text-muted" style="margin-bottom:16px;">输入团队名称</p>
+            <div class="form-group">
+                <label>团队名称</label>
+                <input type="text" id="newTeamNameInput" placeholder="例如：红队" onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddTeam();}">
+            </div>
+            <div style="display:flex; gap:10px; margin-top:8px;">
+                <button class="btn btn-primary" style="flex:1;" onclick="confirmAddTeam()">✅ 创建</button>
+                <button class="btn btn-outline" style="flex:1;" onclick="closeAddTeamModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 删除团队确认弹窗 ==================== -->
+    <div class="modal-overlay" id="deleteTeamModal">
+        <div class="modal-box delete-confirm-box">
+            <div class="warning-icon">⚠️</div>
+            <div class="warning-text">确定要删除该团队吗？</div>
+            <div class="detail-text" id="deleteTeamDetail">此操作将删除该团队的所有成员和填报数据，不可恢复！</div>
+            <div style="display:flex; gap:10px; margin-top:8px;">
+                <button class="btn btn-danger" style="flex:1;" onclick="confirmDeleteTeam()">🗑 确认删除</button>
+                <button class="btn btn-outline" style="flex:1;" onclick="closeDeleteTeamModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== URL分享弹窗 ==================== -->
+    <div class="modal-overlay" id="shareURLModal">
+        <div class="modal-box">
+            <div class="flex-between mb-12">
+                <h2 style="margin-bottom:0;">🔗 分享数据链接</h2>
+                <button class="btn btn-sm btn-outline" onclick="closeShareURLModal()">✕</button>
+            </div>
+            <p class="text-muted" style="margin-bottom:12px;">将当前所有数据编码到URL中，分享给其他人打开即可自动加载。</p>
+            <div class="url-box">
+                <div class="flex-between">
+                    <span style="font-weight:600;font-size:14px;">📋 分享链接</span>
+                    <span class="badge badge-purple" id="urlSizeBadge">计算中...</span>
+                </div>
+                <div class="url-text" id="shareURLDisplay">点击下方按钮生成</div>
+                <div class="url-size-info">
+                    💡 数据大小：<strong id="urlDataSize">0</strong> 字符
+                    <span id="urlWarning" class="text-danger" style="display:none;"> ⚠️ 数据较大，建议使用「导出数据」功能</span>
+                </div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-purple" style="flex:1;" onclick="generateShareURL()">🔄 生成分享链接</button>
+                <button class="btn btn-primary" style="flex:1;" onclick="copyShareURL()">📋 复制链接</button>
+            </div>
+            <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-success btn-sm" style="flex:1;" onclick="generateShareQRFromURL()">📱 生成二维码</button>
+                <button class="btn btn-outline btn-sm" style="flex:1;" onclick="closeShareURLModal()">关闭</button>
+            </div>
+            <div class="mt-12" style="background:#f0fff4; padding:12px; border-radius:10px; border-left:4px solid #48bb78;">
+                <p style="font-size:13px; color:#276749;">
+                    💡 对方打开链接后，数据会自动导入。支持微信、浏览器直接打开。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  数据层
+        // ============================================================
+        var STORAGE_KEY = 'lineup_fill_system_v2';
+
+        function getAppData() {
+            try {
+                var raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    var data = JSON.parse(raw);
+                    if (data.teams && data.currentTeamId !== undefined) {
+                        return data;
+                    }
+                }
+            } catch (e) { console.error('数据解析失败', e); }
+            return {
+                teams: [
+                    { id: 'team_1', name: '红队', members: [] },
+                    { id: 'team_2', name: '蓝队', members: [] }
+                ],
+                currentTeamId: 'team_1',
+                fillData: {}
+            };
+        }
+
+        function saveAppData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function getCurrentTeam() {
+            var data = getAppData();
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === data.currentTeamId) return data.teams[i];
+            }
+            return data.teams[0] || null;
+        }
+
+        function getTeam(teamId) {
+            var data = getAppData();
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === teamId) return data.teams[i];
+            }
+            return null;
+        }
+
+        function getFillData(teamId) {
+            var data = getAppData();
+            if (!data.fillData[teamId]) {
+                data.fillData[teamId] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+                saveAppData(data);
+            }
+            return data.fillData[teamId];
+        }
+
+        function saveFillData(teamId, fillData) {
+            var data = getAppData();
+            data.fillData[teamId] = fillData;
+            saveAppData(data);
+        }
+
+        // ============================================================
+        //  URL 分享功能
+        // ============================================================
+        function generateShareURL() {
+            var data = getAppData();
+            var jsonStr = JSON.stringify(data);
+            var encoded = encodeURIComponent(jsonStr);
+            var url = window.location.origin + window.location.pathname + '?load=' + encoded;
+
+            document.getElementById('shareURLDisplay').textContent = url;
+            document.getElementById('shareURLDisplay').style.wordBreak = 'break-all';
+
+            var size = jsonStr.length;
+            document.getElementById('urlDataSize').textContent = size;
+            document.getElementById('urlSizeBadge').textContent = size > 5000 ? '📦 较大' : '✅ 适中';
+
+            var warning = document.getElementById('urlWarning');
+            if (size > 8000) {
+                warning.style.display = 'inline';
+            } else {
+                warning.style.display = 'none';
+            }
+
+            window._shareURL = url;
+            showToast('✅ 分享链接已生成');
+        }
+
+        function copyShareURL() {
+            var url = window._shareURL;
+            if (!url) {
+                showToast('⚠️ 请先生成分享链接');
+                return;
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(function() {
+                    showToast('✅ 链接已复制到剪贴板');
+                }).catch(function() {
+                    fallbackCopy(url);
+                });
+            } else {
+                fallbackCopy(url);
+            }
+        }
+
+        function fallbackCopy(text) {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy');
+                showToast('✅ 已复制'); } catch (e) { showToast('复制失败，请手动复制'); }
+            document.body.removeChild(ta);
+        }
+
+        function generateShareQRFromURL() {
+            var url = window._shareURL;
+            if (!url) {
+                showToast('⚠️ 请先生成分享链接');
+                return;
+            }
+            switchTab('share');
+            var container = document.getElementById('qrcode');
+            if (!container) return;
+            container.innerHTML = '';
+            try {
+                new QRCode(container, {
+                    text: url,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#1a202c',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                document.getElementById('shareLink').value = url;
+                showToast('✅ 二维码已生成');
+            } catch (e) {
+                showToast('⚠️ 生成失败，请检查网络');
+                console.error(e);
+            }
+            closeShareURLModal();
+        }
+
+        function showShareURLModal() {
+            document.getElementById('shareURLModal').classList.add('show');
+            setTimeout(generateShareURL, 100);
+        }
+
+        function closeShareURLModal() {
+            document.getElementById('shareURLModal').classList.remove('show');
+        }
+
+        function loadDataFromURL() {
+            var params = new URLSearchParams(window.location.search);
+            var loadData = params.get('load');
+            if (loadData) {
+                try {
+                    var decoded = decodeURIComponent(loadData);
+                    var data = JSON.parse(decoded);
+                    if (data.teams && data.currentTeamId !== undefined) {
+                        if (confirm('检测到数据链接，是否导入数据？\n\n这将覆盖当前所有数据。')) {
+                            saveAppData(data);
+                            showToast('✅ 数据已从链接导入');
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                            renderTeams();
+                            renderMembers();
+                            renderFillPage();
+                            renderDataPage();
+                            renderShareSelect();
+                            return true;
+                        }
+                    } else {
+                        showToast('⚠️ 链接数据格式无效');
+                    }
+                } catch (e) {
+                    console.error('解析失败:', e);
+                    showToast('⚠️ 数据解析失败，链接可能已损坏');
+                }
+            }
+            return false;
+        }
+
+        // ============================================================
+        //  Toast
+        // ============================================================
+        var toastTimer = null;
+
+        function showToast(msg) {
+            var el = document.getElementById('toast');
+            if (!el) return;
+            el.textContent = msg;
+            el.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function() { el.classList.remove('show'); }, 3000);
+        }
+
+        // ============================================================
+        //  Tab切换
+        // ============================================================
+        function switchTab(tab) {
+            var tabs = document.querySelectorAll('.tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.toggle('active', tabs[i].dataset.tab === tab);
+            }
+            var cards = document.querySelectorAll('.card[id^="tab-"]');
+            for (var i = 0; i < cards.length; i++) {
+                cards[i].classList.toggle('hidden', cards[i].id !== 'tab-' + tab);
+            }
+            if (tab === 'members') renderMembers();
+            if (tab === 'fill') renderFillPage();
+            if (tab === 'data') renderDataPage();
+            if (tab === 'share') { renderTeams();
+                renderShareSelect(); }
+        }
+
+        // ============================================================
+        //  团队管理
+        // ============================================================
+        function renderTeams() {
+            var data = getAppData();
+            var container = document.getElementById('teamSelector');
+            if (!container) return;
+
+            if (data.teams.length === 0) {
+                container.innerHTML = '<span class="text-muted text-sm">暂无团队，请创建</span>';
+                var nameEl = document.getElementById('currentTeamName');
+                if (nameEl) nameEl.textContent = '-';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < data.teams.length; i++) {
+                var team = data.teams[i];
+                var active = team.id === data.currentTeamId ? 'active' : '';
+                html += '<span class="team-tab ' + active + '">' +
+                    '<span onclick="switchTeam(\'' + team.id + '\')">' +
+                    team.name +
+                    '<span class="count">(' + team.members.length + ')</span>' +
+                    '</span>' +
+                    '<button class="delete-team-btn" onclick="event.stopPropagation();showDeleteTeamModal(\'' + team.id +
+                    '\')" title="删除团队">×</button>' +
+                    '</span>';
+            }
+            container.innerHTML = html;
+
+            var current = getCurrentTeam();
+            var nameEl = document.getElementById('currentTeamName');
+            if (nameEl) nameEl.textContent = current ? current.name : '-';
+        }
+
+        function switchTeam(teamId) {
+            var data = getAppData();
+            data.currentTeamId = teamId;
+            saveAppData(data);
+            renderTeams();
+            renderMembers();
+            renderFillPage();
+            renderDataPage();
+            renderShareSelect();
+            var qrContainer = document.getElementById('qrcode');
+            if (qrContainer) qrContainer.innerHTML = '';
+            var shareLink = document.getElementById('shareLink');
+            if (shareLink) shareLink.value = '';
+        }
+
+        function showAddTeamModal() {
+            var modal = document.getElementById('addTeamModal');
+            if (modal) {
+                modal.classList.add('show');
+                var input = document.getElementById('newTeamNameInput');
+                if (input) { input.value = '';
+                    setTimeout(function() { input.focus(); }, 100); }
+            }
+        }
+
+        function closeAddTeamModal() {
+            var modal = document.getElementById('addTeamModal');
+            if (modal) modal.classList.remove('show');
+        }
+
+        function confirmAddTeam() {
+            var input = document.getElementById('newTeamNameInput');
+            if (!input) return;
+            var name = input.value.trim();
+            if (!name) { showToast('请输入团队名称'); return; }
+            var data = getAppData();
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].name === name) { showToast('该团队名称已存在'); return; }
+            }
+            var newTeam = { id: 'team_' + Date.now(), name: name, members: [] };
+            data.teams.push(newTeam);
+            data.currentTeamId = newTeam.id;
+            data.fillData[newTeam.id] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            saveAppData(data);
+            renderTeams();
+            renderMembers();
+            renderFillPage();
+            renderDataPage();
+            closeAddTeamModal();
+            showToast('✅ 团队 "' + name + '" 已创建');
+        }
+
+        // ============================================================
+        //  删除团队
+        // ============================================================
+        var pendingDeleteTeamId = null;
+
+        function showDeleteTeamModal(teamId) {
+            pendingDeleteTeamId = teamId;
+            var team = getTeam(teamId);
+            var detail = document.getElementById('deleteTeamDetail');
+            if (detail && team) {
+                detail.textContent = '将删除团队「' + team.name + '」及其所有成员（' + team.members.length + '人）和填报数据，不可恢复！';
+            }
+            document.getElementById('deleteTeamModal').classList.add('show');
+        }
+
+        function closeDeleteTeamModal() {
+            document.getElementById('deleteTeamModal').classList.remove('show');
+            pendingDeleteTeamId = null;
+        }
+
+        function confirmDeleteTeam() {
+            if (!pendingDeleteTeamId) return;
+            deleteTeam(pendingDeleteTeamId);
+            closeDeleteTeamModal();
+        }
+
+        function deleteTeam(teamId) {
+            var data = getAppData();
+            var team = getTeam(teamId);
+            if (!team) { showToast('⚠️ 团队不存在'); return; }
+
+            var newTeams = [];
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id !== teamId) {
+                    newTeams.push(data.teams[i]);
+                }
+            }
+            data.teams = newTeams;
+            delete data.fillData[teamId];
+
+            if (data.currentTeamId === teamId) {
+                data.currentTeamId = data.teams.length > 0 ? data.teams[0].id : null;
+            }
+
+            saveAppData(data);
+            renderTeams();
+            renderMembers();
+            renderFillPage();
+            renderDataPage();
+            renderShareSelect();
+
+            var qrContainer = document.getElementById('qrcode');
+            if (qrContainer) qrContainer.innerHTML = '';
+            var shareLink = document.getElementById('shareLink');
+            if (shareLink) shareLink.value = '';
+
+            showToast('✅ 已删除团队「' + team.name + '」');
+        }
+
+        // ============================================================
+        //  成员管理
+        // ============================================================
+        function renderMembers() {
+            var team = getCurrentTeam();
+            var members = team ? team.members : [];
+            var container = document.getElementById('memberList');
+            if (!container) return;
+            var countEl = document.getElementById('memberCount');
+            if (countEl) countEl.textContent = members.length;
+            var male = 0,
+                female = 0;
+            for (var i = 0; i < members.length; i++) {
+                if (members[i].gender === 'male') male++;
+                else female++;
+            }
+            var statsEl = document.getElementById('genderStats');
+            if (statsEl) statsEl.textContent = '👨 ' + male + ' · 👩 ' + female;
+            if (members.length === 0) {
+                container.innerHTML = '<div class="empty">还没有成员，添加一些吧</div>';
+                return;
+            }
+            var html = '';
+            for (var i = 0; i < members.length; i++) {
+                var m = members[i];
+                var genderClass = m.gender === 'male' ? 'gender-m' : 'gender-f';
+                var genderIcon = m.gender === 'male' ? '♂' : '♀';
+                html += '<span class="member-tag">' +
+                    m.name +
+                    '<span class="gender-badge ' + genderClass + '">' + genderIcon + '</span>' +
+                    '<button class="remove-btn" onclick="removeMember(' + i + ')" title="移除">×</button>' +
+                    '</span>';
+            }
+            container.innerHTML = html;
+        }
+
+        function addMember() {
+            var nameInput = document.getElementById('memberName');
+            var genderSelect = document.getElementById('memberGender');
+            if (!nameInput || !genderSelect) { showToast('⚠️ 页面元素未加载'); return; }
+            var name = nameInput.value.trim();
+            var gender = genderSelect.value;
+            if (!name) { showToast('⚠️ 请输入姓名');
+                nameInput.focus(); return; }
+            var data = getAppData();
+            var team = null;
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === data.currentTeamId) { team = data.teams[i]; break; }
+            }
+            if (!team) { showToast('⚠️ 未找到当前团队'); return; }
+            for (var i = 0; i < team.members.length; i++) {
+                if (team.members[i].name === name) { showToast('⚠️ 该成员已存在');
+                    nameInput.value = '';
+                    nameInput.focus(); return; }
+            }
+            team.members.push({ name: name, gender: gender });
+            data.fillData[data.currentTeamId] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            saveAppData(data);
+            nameInput.value = '';
+            nameInput.focus();
+            renderMembers();
+            renderTeams();
+            renderFillPage();
+            renderDataPage();
+            showToast('✅ 已添加 ' + name);
+        }
+
+        function removeMember(index) {
+            var data = getAppData();
+            var team = null;
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === data.currentTeamId) { team = data.teams[i]; break; }
+            }
+            if (!team) return;
+            var removed = team.members[index].name;
+            if (!confirm('确定移除「' + removed + '」吗？')) return;
+            team.members.splice(index, 1);
+            data.fillData[data.currentTeamId] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            saveAppData(data);
+            renderMembers();
+            renderTeams();
+            renderFillPage();
+            renderDataPage();
+            showToast('已移除 ' + removed);
+        }
+
+        function clearTeamMembers() {
+            var team = getCurrentTeam();
+            if (!team) return;
+            if (team.members.length === 0) { showToast('该团队暂无成员'); return; }
+            if (!confirm('确认清空「' + team.name + '」的所有成员？')) return;
+            var data = getAppData();
+            var t = null;
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === data.currentTeamId) { t = data.teams[i]; break; }
+            }
+            if (t) {
+                t.members = [];
+                data.fillData[data.currentTeamId] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+                saveAppData(data);
+                renderMembers();
+                renderTeams();
+                renderFillPage();
+                renderDataPage();
+                showToast('已清空');
+            }
+        }
+
+        function loadExample() {
+            var data = getAppData();
+            var team = null;
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === data.currentTeamId) { team = data.teams[i]; break; }
+            }
+            if (!team) return;
+            if (team.members.length > 0) {
+                if (!confirm('当前团队已有成员，是否覆盖为示例数据？')) return;
+            }
+            team.members = [
+                { name: '张伟', gender: 'male' },
+                { name: '李娜', gender: 'female' },
+                { name: '王强', gender: 'male' },
+                { name: '刘洋', gender: 'female' },
+                { name: '陈明', gender: 'male' },
+                { name: '赵雪', gender: 'female' },
+                { name: '孙浩', gender: 'male' },
+                { name: '周婷', gender: 'female' }
+            ];
+            data.fillData[data.currentTeamId] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            saveAppData(data);
+            renderMembers();
+            renderTeams();
+            renderFillPage();
+            renderDataPage();
+            showToast('✅ 已加载示例数据');
+        }
+
+        // ============================================================
+        //  ===== 核心修复：填报排阵（自由选择换男或换女） =====
+        // ============================================================
+
+        // 全局状态：当前选择的换人性别
+        var selectedReplaceGender = null;
+
+        function renderFillPage() {
+            var container = document.getElementById('fillContainer');
+            if (!container) return;
+            var team = getCurrentTeam();
+            var teamNameEl = document.getElementById('fillTeamName');
+            if (teamNameEl) teamNameEl.textContent = team ? team.name : '-';
+
+            if (!team || team.members.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>请先在「成员管理」中添加团队成员</p></div>';
+                return;
+            }
+
+            var fillData = getFillData(team.id);
+
+            if (fillData.completed) {
+                container.innerHTML = renderCompletedView(team, fillData);
+                return;
+            }
+
+            var allMembers = team.members;
+            var allUsed = true;
+            for (var i = 0; i < allMembers.length; i++) {
+                if (fillData.usedPlayers.indexOf(allMembers[i].name) === -1) { allUsed = false; break; }
+            }
+
+            if (allUsed && fillData.steps.length > 0) {
+                fillData.completed = true;
+                saveFillData(team.id, fillData);
+                container.innerHTML = renderCompletedView(team, fillData);
+                return;
+            }
+
+            container.innerHTML = renderFillForm(team, fillData);
+        }
+
+        function renderFillForm(team, fillData) {
+            var steps = fillData.steps || [];
+            var currentCourt = fillData.currentCourt || [];
+            var usedPlayers = fillData.usedPlayers || [];
+            var stepNum = steps.length + 1;
+            var isFirstStep = steps.length === 0;
+
+            var availablePlayers = [];
+            for (var i = 0; i < team.members.length; i++) {
+                if (usedPlayers.indexOf(team.members[i].name) === -1) {
+                    availablePlayers.push(team.members[i]);
+                }
+            }
+
+            var html = '';
+
+            // 步骤指示器
+            html += '<div class="step-indicator">';
+            var totalSteps = team.members.length - 1;
+            for (var i = 1; i <= totalSteps; i++) {
+                var cls = 'step-dot';
+                if (i < stepNum) cls += ' done';
+                if (i === stepNum) cls += ' active';
+                html += '<span class="' + cls + '">' + i + '</span>';
+            }
+            html += '</div>';
+
+            // 当前步骤信息
+            html += '<div class="lineup-step-card" style="border-color:#48bb78;">';
+            html += '<div class="step-header">';
+            html += '<span class="step-number">📍 第 ' + stepNum + ' 步</span>';
+            html += '<span class="step-action start">' + (isFirstStep ? '🌟 首发' : '🔄 换人') + '</span>';
+            html += '</div>';
+
+            // 当前场上阵容
+            html += '<div style="margin-bottom:8px;font-weight:600;color:#2d3748;">当前场上：</div>';
+            html += '<div class="court-slots">';
+            var courtMale = null,
+                courtFemale = null;
+            for (var i = 0; i < currentCourt.length; i++) {
+                if (currentCourt[i].gender === 'male') courtMale = currentCourt[i];
+                else courtFemale = currentCourt[i];
+            }
+            html += '<div class="court-slot ' + (courtMale ? 'filled' : '') + '">';
+            html += '<div class="slot-label">♂ 男</div>';
+            html += '<div class="slot-name">' + (courtMale ? courtMale.name : '—') + '</div>';
+            html += '</div>';
+            html += '<div class="court-slot ' + (courtFemale ? 'filled' : '') + '">';
+            html += '<div class="slot-label">♀ 女</div>';
+            html += '<div class="slot-name">' + (courtFemale ? courtFemale.name : '—') + '</div>';
+            html += '</div>';
+            html += '</div>';
+
+            if (!isFirstStep) {
+                var lastStep = steps[steps.length - 1];
+                var subOut = lastStep.substitutedOut || '';
+                var subIn = lastStep.substitutedIn || '';
+                html += '<div class="sub-info">⬇ ' + subOut + ' 下场 → ⬆ ' + subIn + ' 上场</div>';
+            }
+
+            html += '</div>';
+
+            if (availablePlayers.length > 0) {
+                if (isFirstStep) {
+                    // 首发：选1男+1女
+                    html += '<div style="margin-top:12px;font-weight:600;color:#2d3748;">请选择首发阵容（1男 + 1女）：</div>';
+                    html += '<div class="member-select-grid" id="fillMemberGrid">';
+                    for (var i = 0; i < availablePlayers.length; i++) {
+                        var p = availablePlayers[i];
+                        var icon = p.gender === 'male' ? '♂' : '♀';
+                        html += '<span class="member-option" onclick="selectFillPlayer(\'' + p.name + '\', \'' + p
+                            .gender + '\')" data-name="' + p.name + '">' + p.name + ' ' + icon + '</span>';
+                    }
+                    html += '</div>';
+                    html += '<div class="mt-12">';
+                    html += '<button class="btn btn-success" onclick="confirmFillStep()" id="confirmFillBtn" disabled>';
+                    html += '✅ 确认首发阵容';
+                    html += '</button>';
+                    html += ' <span class="text-muted text-sm" id="fillSelectionStatus">请选择 1男 和 1女</span>';
+                    html += '</div>';
+                } else {
+                    // ===== 换人：先选换男还是换女 =====
+                    html += '<div style="margin-top:12px;font-weight:600;color:#2d3748;">第一步：选择要换下的性别</div>';
+
+                    // 检查场上男女情况，如果某性别不在场上，则禁用
+                    var hasMaleOnCourt = false;
+                    var hasFemaleOnCourt = false;
+                    for (var i = 0; i < currentCourt.length; i++) {
+                        if (currentCourt[i].gender === 'male') hasMaleOnCourt = true;
+                        else hasFemaleOnCourt = true;
+                    }
+
+                    // 检查是否有未上场的男/女
+                    var hasAvailableMale = false;
+                    var hasAvailableFemale = false;
+                    for (var i = 0; i < availablePlayers.length; i++) {
+                        if (availablePlayers[i].gender === 'male') hasAvailableMale = true;
+                        else hasAvailableFemale = true;
+                    }
+
+                    html += '<div class="gender-select-group">';
+                    html += '<button class="gender-btn" id="genderBtnMale" onclick="selectReplaceGender(\'male\')" ' +
+                        (hasMaleOnCourt && hasAvailableMale ? '' : 'disabled') + '>';
+                    html += '♂ 换男';
+                    if (!hasMaleOnCourt) html += ' (场上无男)';
+                    else if (!hasAvailableMale) html += ' (无替补)';
+                    html += '</button>';
+                    html += '<button class="gender-btn" id="genderBtnFemale" onclick="selectReplaceGender(\'female\')" ' +
+                        (hasFemaleOnCourt && hasAvailableFemale ? '' : 'disabled') + '>';
+                    html += '♀ 换女';
+                    if (!hasFemaleOnCourt) html += ' (场上无女)';
+                    else if (!hasAvailableFemale) html += ' (无替补)';
+                    html += '</button>';
+                    html += '</div>';
+
+                    // 显示当前选择的性别
+                    html += '<div class="text-muted text-sm" id="selectedGenderDisplay" style="margin-bottom:8px;">';
+                    if (selectedReplaceGender === 'male') html += '已选择：换下 ♂ 男队员';
+                    else if (selectedReplaceGender === 'female') html += '已选择：换下 ♀ 女队员';
+                    else html += '请先选择要换下的性别';
+                    html += '</div>';
+
+                    // 第二步：显示对应性别的未上场队员
+                    html += '<div style="margin-top:8px;font-weight:600;color:#2d3748;">第二步：选择上场的队员</div>';
+                    html += '<div class="member-select-grid" id="fillMemberGrid">';
+
+                    var filtered = [];
+                    if (selectedReplaceGender) {
+                        for (var i = 0; i < availablePlayers.length; i++) {
+                            if (availablePlayers[i].gender === selectedReplaceGender) {
+                                filtered.push(availablePlayers[i]);
+                            }
+                        }
+                    }
+
+                    if (filtered.length === 0 && selectedReplaceGender) {
+                        html += '<span class="text-muted text-sm">没有符合条件的未上场队员</span>';
+                    } else if (!selectedReplaceGender) {
+                        html += '<span class="text-muted text-sm">请先选择要换下的性别</span>';
+                    } else {
+                        for (var i = 0; i < filtered.length; i++) {
+                            var p = filtered[i];
+                            var icon = p.gender === 'male' ? '♂' : '♀';
+                            html += '<span class="member-option" onclick="selectFillPlayer(\'' + p.name + '\', \'' + p
+                                .gender + '\')" data-name="' + p.name + '">' + p.name + ' ' + icon + '</span>';
+                        }
+                    }
+                    html += '</div>';
+
+                    html += '<div class="mt-12">';
+                    html += '<button class="btn btn-success" onclick="confirmFillStep()" id="confirmFillBtn" disabled>';
+                    html += '✅ 确认换人';
+                    html += '</button>';
+                    html += ' <span class="text-muted text-sm" id="fillSelectionStatus">请选择要上场的队员</span>';
+                    html += '</div>';
+                }
+            } else {
+                html += '<div class="empty-state"><div class="icon">🎉</div><p>所有队员都已上场！排阵完成</p></div>';
+                fillData.completed = true;
+                saveFillData(team.id, fillData);
+                setTimeout(function() { renderFillPage(); }, 500);
+            }
+
+            return html;
+        }
+
+        // 选择换人的性别
+        function selectReplaceGender(gender) {
+            selectedReplaceGender = gender;
+            // 清空之前选择的队员
+            selectedFillPlayers = [];
+
+            // 更新性别按钮样式
+            var btnMale = document.getElementById('genderBtnMale');
+            var btnFemale = document.getElementById('genderBtnFemale');
+            if (btnMale) {
+                btnMale.className = 'gender-btn' + (gender === 'male' ? ' active-male' : '');
+            }
+            if (btnFemale) {
+                btnFemale.className = 'gender-btn' + (gender === 'female' ? ' active-female' : '');
+            }
+
+            // 更新显示
+            var display = document.getElementById('selectedGenderDisplay');
+            if (display) {
+                if (gender === 'male') display.textContent = '已选择：换下 ♂ 男队员';
+                else display.textContent = '已选择：换下 ♀ 女队员';
+            }
+
+            // 重新渲染成员选择区
+            var team = getCurrentTeam();
+            if (team) {
+                var fillData = getFillData(team.id);
+                // 重新生成成员选择
+                var grid = document.getElementById('fillMemberGrid');
+                if (grid) {
+                    var availablePlayers = [];
+                    var usedPlayers = fillData.usedPlayers || [];
+                    for (var i = 0; i < team.members.length; i++) {
+                        if (usedPlayers.indexOf(team.members[i].name) === -1) {
+                            availablePlayers.push(team.members[i]);
+                        }
+                    }
+                    var filtered = [];
+                    for (var i = 0; i < availablePlayers.length; i++) {
+                        if (availablePlayers[i].gender === gender) {
+                            filtered.push(availablePlayers[i]);
+                        }
+                    }
+                    var html = '';
+                    if (filtered.length === 0) {
+                        html = '<span class="text-muted text-sm">没有符合条件的未上场队员</span>';
+                    } else {
+                        for (var i = 0; i < filtered.length; i++) {
+                            var p = filtered[i];
+                            var icon = p.gender === 'male' ? '♂' : '♀';
+                            html += '<span class="member-option" onclick="selectFillPlayer(\'' + p.name + '\', \'' + p
+                                .gender + '\')" data-name="' + p.name + '">' + p.name + ' ' + icon + '</span>';
+                        }
+                    }
+                    grid.innerHTML = html;
+                }
+            }
+
+            // 更新状态
+            var status = document.getElementById('fillSelectionStatus');
+            if (status) {
+                status.textContent = '请选择要上场的队员';
+            }
+            var btn = document.getElementById('confirmFillBtn');
+            if (btn) {
+                btn.disabled = true;
+            }
+        }
+
+        // 选中的队员（首发或替补）
+        var selectedFillPlayers = [];
+
+        function selectFillPlayer(name, gender) {
+            var team = getCurrentTeam();
+            if (!team) return;
+            var fillData = getFillData(team.id);
+            var isFirstStep = fillData.steps.length === 0;
+
+            if (isFirstStep) {
+                // 首发：选1男1女
+                var existing = selectedFillPlayers.find(function(p) { return p.name === name; });
+                if (existing) {
+                    selectedFillPlayers = selectedFillPlayers.filter(function(p) { return p.name !== name; });
+                } else {
+                    var sameGender = selectedFillPlayers.find(function(p) { return p.gender === gender; });
+                    if (sameGender) {
+                        selectedFillPlayers = selectedFillPlayers.filter(function(p) { return p.gender !== gender; });
+                    }
+                    selectedFillPlayers.push({ name: name, gender: gender });
+                }
+
+                var grid = document.getElementById('fillMemberGrid');
+                if (grid) {
+                    var options = grid.querySelectorAll('.member-option');
+                    for (var i = 0; i < options.length; i++) {
+                        var opt = options[i];
+                        var optName = opt.getAttribute('data-name');
+                        var isSelected = selectedFillPlayers.some(function(p) { return p.name === optName; });
+                        opt.classList.toggle('selected', isSelected);
+                    }
+                }
+
+                var btn = document.getElementById('confirmFillBtn');
+                var status = document.getElementById('fillSelectionStatus');
+                if (btn && status) {
+                    var hasMale = selectedFillPlayers.some(function(p) { return p.gender === 'male'; });
+                    var hasFemale = selectedFillPlayers.some(function(p) { return p.gender === 'female'; });
+                    if (hasMale && hasFemale) {
+                        btn.disabled = false;
+                        status.textContent = '✅ 已选 1男 + 1女';
+                    } else {
+                        btn.disabled = true;
+                        status.textContent = '请选择 1男 和 1女';
+                    }
+                }
+            } else {
+                // 换人：只能选1人
+                var existing = selectedFillPlayers.find(function(p) { return p.name === name; });
+                if (existing) {
+                    selectedFillPlayers = [];
+                } else {
+                    // 检查是否与选择的性别匹配
+                    if (selectedReplaceGender && gender !== selectedReplaceGender) {
+                        showToast('⚠️ 请选择 ' + (selectedReplaceGender === 'male' ? '男' : '女') + ' 队员');
+                        return;
+                    }
+                    selectedFillPlayers = [{ name: name, gender: gender }];
+                }
+
+                var grid = document.getElementById('fillMemberGrid');
+                if (grid) {
+                    var options = grid.querySelectorAll('.member-option');
+                    for (var i = 0; i < options.length; i++) {
+                        var opt = options[i];
+                        var optName = opt.getAttribute('data-name');
+                        var isSelected = selectedFillPlayers.some(function(p) { return p.name === optName; });
+                        opt.classList.toggle('selected', isSelected);
+                    }
+                }
+
+                var btn = document.getElementById('confirmFillBtn');
+                var status = document.getElementById('fillSelectionStatus');
+                if (btn && status) {
+                    if (selectedFillPlayers.length === 1) {
+                        btn.disabled = false;
+                        status.textContent = '✅ 已选 ' + selectedFillPlayers[0].name;
+                    } else {
+                        btn.disabled = true;
+                        status.textContent = '请选择要上场的队员';
+                    }
+                }
+            }
+        }
+
+        function confirmFillStep() {
+            var team = getCurrentTeam();
+            if (!team) { showToast('⚠️ 未找到团队'); return; }
+            var fillData = getFillData(team.id);
+            var isFirstStep = fillData.steps.length === 0;
+
+            if (selectedFillPlayers.length === 0) {
+                showToast('⚠️ 请先选择队员');
+                return;
+            }
+
+            var currentCourt = fillData.currentCourt || [];
+            var usedPlayers = fillData.usedPlayers || [];
+            var steps = fillData.steps || [];
+            var stepNum = steps.length + 1;
+
+            var newCourt = [];
+            var subOut = null;
+            var subIn = null;
+
+            if (isFirstStep) {
+                var male = selectedFillPlayers.find(function(p) { return p.gender === 'male'; });
+                var female = selectedFillPlayers.find(function(p) { return p.gender === 'female'; });
+                if (!male || !female) { showToast('⚠️ 请选择 1男 和 1女'); return; }
+                newCourt = [male, female];
+                usedPlayers = [male.name, female.name];
+                steps.push({
+                    step: stepNum,
+                    action: '首发',
+                    onCourt: [{ name: male.name, gender: male.gender }, { name: female.name, gender: female.gender }],
+                    substitutedOut: null,
+                    substitutedIn: null
+                });
+            } else {
+                var selected = selectedFillPlayers[0];
+                // 找到场上同性别要被换下的队员
+                var toReplace = null;
+                for (var i = 0; i < currentCourt.length; i++) {
+                    if (currentCourt[i].gender === selected.gender) {
+                        toReplace = currentCourt[i];
+                        break;
+                    }
+                }
+                if (!toReplace) {
+                    showToast('⚠️ 场上没有同性别队员可换，请换另一个性别');
+                    return;
+                }
+
+                subOut = toReplace;
+                subIn = selected;
+
+                newCourt = [];
+                for (var i = 0; i < currentCourt.length; i++) {
+                    if (currentCourt[i].name !== toReplace.name) {
+                        newCourt.push(currentCourt[i]);
+                    }
+                }
+                newCourt.push(selected);
+                usedPlayers.push(selected.name);
+
+                steps.push({
+                    step: stepNum,
+                    action: '换人',
+                    onCourt: newCourt.map(function(p) { return { name: p.name, gender: p.gender }; }),
+                    substitutedOut: subOut.name,
+                    substitutedIn: subIn.name
+                });
+            }
+
+            fillData.currentCourt = newCourt;
+            fillData.usedPlayers = usedPlayers;
+            fillData.steps = steps;
+
+            var allMembers = team.members;
+            var allUsed = true;
+            for (var i = 0; i < allMembers.length; i++) {
+                if (usedPlayers.indexOf(allMembers[i].name) === -1) { allUsed = false; break; }
+            }
+            if (allUsed && steps.length > 0) {
+                fillData.completed = true;
+            }
+
+            saveFillData(team.id, fillData);
+            selectedFillPlayers = [];
+            selectedReplaceGender = null;
+
+            renderFillPage();
+            renderDataPage();
+            showToast('✅ 第 ' + stepNum + ' 步确认完成');
+        }
+
+        function renderCompletedView(team, fillData) {
+            var html = '<div class="empty-state" style="padding:20px;">';
+            html += '<div class="icon">🎉</div>';
+            html += '<h3 style="color:#276749;">排阵已完成！</h3>';
+            html += '<p class="text-muted">所有 ' + team.members.length + ' 名队员都已上场</p>';
+            html += '</div>';
+
+            html += '<div style="margin-top:12px;">';
+            html += '<h3>📋 完整出场顺序</h3>';
+            for (var i = 0; i < fillData.steps.length; i++) {
+                var s = fillData.steps[i];
+                html += '<div class="lineup-step-card">';
+                html += '<div class="step-header">';
+                html += '<span class="step-number">第 ' + s.step + ' 步</span>';
+                html += '<span class="step-action ' + (s.action === '首发' ? 'start' : '') + '">' +
+                    (s.action === '首发' ? '🌟 首发' : '🔄 换人') + '</span>';
+                html += '</div>';
+                html += '<div class="court-players">';
+                for (var j = 0; j < s.onCourt.length; j++) {
+                    var p = s.onCourt[j];
+                    html += '<span class="court-player ' + p.gender + '">' + p.name + ' ' + (p.gender === 'male' ? '♂' :
+                        '♀') + '</span>';
+                }
+                html += '</div>';
+                if (s.substitutedOut) {
+                    html += '<div class="sub-info">⬇ ' + s.substitutedOut + ' 下场 → ⬆ ' + s.substitutedIn + ' 上场</div>';
+                }
+                html += '</div>';
+            }
+            html += '</div>';
+
+            return html;
+        }
+
+        function resetFillData() {
+            if (!confirm('确认重置当前团队的填报数据？')) return;
+            var team = getCurrentTeam();
+            if (!team) return;
+            var fillData = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            saveFillData(team.id, fillData);
+            selectedFillPlayers = [];
+            selectedReplaceGender = null;
+            renderFillPage();
+            renderDataPage();
+            showToast('已重置填报数据');
+        }
+
+        // ============================================================
+        //  数据导出
+        // ============================================================
+        function renderDataPage() {
+            var container = document.getElementById('dataContainer');
+            if (!container) return;
+            var team = getCurrentTeam();
+            if (!team) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📊</div><p>请选择团队</p></div>';
+                return;
+            }
+            var fillData = getFillData(team.id);
+            if (!fillData || !fillData.steps || fillData.steps.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📊</div><p>暂无填报数据</p></div>';
+                return;
+            }
+
+            var html = '<div style="overflow-x:auto;">';
+            html += '<table class="data-table">';
+            html += '<thead><tr><th>步骤</th><th>动作</th><th>场上球员1</th><th>场上球员2</th><th>换下</th><th>换上</th></tr></thead>';
+            html += '<tbody>';
+            for (var i = 0; i < fillData.steps.length; i++) {
+                var s = fillData.steps[i];
+                var p1 = s.onCourt[0] ? s.onCourt[0].name + '(' + (s.onCourt[0].gender === 'male' ? '男' : '女') + ')' :
+                '';
+                var p2 = s.onCourt[1] ? s.onCourt[1].name + '(' + (s.onCourt[1].gender === 'male' ? '男' : '女') + ')' :
+                '';
+                html += '<tr>';
+                html += '<td>' + s.step + '</td>';
+                html += '<td>' + (s.action === '首发' ? '🌟 首发' : '🔄 换人') + '</td>';
+                html += '<td>' + p1 + '</td>';
+                html += '<td>' + p2 + '</td>';
+                html += '<td>' + (s.substitutedOut || '-') + '</td>';
+                html += '<td>' + (s.substitutedIn || '-') + '</td>';
+                html += '</tr>';
+            }
+            html += '</tbody></table>';
+            html += '<div class="mt-12 text-muted">共 ' + fillData.steps.length + ' 步，' + fillData.usedPlayers.length +
+                ' 名队员已上场</div>';
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function exportFillDataCSV() {
+            var team = getCurrentTeam();
+            if (!team) { showToast('请选择团队'); return; }
+            var fillData = getFillData(team.id);
+            if (!fillData || !fillData.steps || fillData.steps.length === 0) {
+                showToast('暂无数据可导出');
+                return;
+            }
+            var csv = '团队,步骤,动作,场上球员1,场上球员2,换下,换上,填报时间\n';
+            var now = new Date().toLocaleString();
+            for (var i = 0; i < fillData.steps.length; i++) {
+                var s = fillData.steps[i];
+                var p1 = s.onCourt[0] ? s.onCourt[0].name : '';
+                var p2 = s.onCourt[1] ? s.onCourt[1].name : '';
+                csv += team.name + ',' + s.step + ',' + (s.action === '首发' ? '首发' : '换人') +
+                    ',' + p1 + ',' + p2 + ',' + (s.substitutedOut || '') + ',' + (s.substitutedIn || '') + ',' + now +
+                    '\n';
+            }
+            var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '出场名单_' + team.name + '_' + new Date().toISOString().slice(0, 10) + '.csv';
+            link.click();
+            showToast('✅ CSV导出成功');
+        }
+
+        function exportFillDataJSON() {
+            var team = getCurrentTeam();
+            if (!team) { showToast('请选择团队'); return; }
+            var fillData = getFillData(team.id);
+            if (!fillData || !fillData.steps || fillData.steps.length === 0) {
+                showToast('暂无数据可导出');
+                return;
+            }
+            var data = {
+                team: team.name,
+                members: team.members,
+                fillData: fillData,
+                exportedAt: new Date().toISOString()
+            };
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '出场名单_' + team.name + '_' + new Date().toISOString().slice(0, 10) + '.json';
+            link.click();
+            showToast('✅ JSON导出成功');
+        }
+
+        function exportAllData() {
+            var data = getAppData();
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '全部数据_' + new Date().toISOString().slice(0, 10) + '.json';
+            link.click();
+            showToast('✅ 全部数据已导出');
+        }
+
+        function handleImport(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var data = JSON.parse(e.target.result);
+                    if (data.teams && data.currentTeamId !== undefined) {
+                        if (confirm('导入将覆盖当前所有数据，确认继续？')) {
+                            saveAppData(data);
+                            renderTeams();
+                            renderMembers();
+                            renderFillPage();
+                            renderDataPage();
+                            renderShareSelect();
+                            showToast('✅ 导入成功');
+                        }
+                    } else {
+                        showToast('⚠️ 无效的数据文件');
+                    }
+                } catch (err) {
+                    showToast('⚠️ 文件解析失败');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ============================================================
+        //  二维码分享
+        // ============================================================
+        function renderShareSelect() {
+            // 不需要额外渲染
+        }
+
+        function generateShareQR() {
+            var team = getCurrentTeam();
+            if (!team) { showToast('请选择团队'); return; }
+
+            var fillData = getFillData(team.id);
+
+            var shareData = {
+                teamId: team.id,
+                teamName: team.name,
+                members: team.members,
+                fillData: fillData,
+                mode: 'fill'
+            };
+
+            var encoded = encodeURIComponent(JSON.stringify(shareData));
+            var url = window.location.origin + window.location.pathname + '?fill=' + encoded;
+
+            var linkInput = document.getElementById('shareLink');
+            if (linkInput) linkInput.value = url;
+
+            var container = document.getElementById('qrcode');
+            if (!container) return;
+            container.innerHTML = '';
+            try {
+                new QRCode(container, {
+                    text: url,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#1a202c',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                showToast('✅ 二维码已生成，扫码可填报');
+            } catch (e) {
+                showToast('⚠️ 生成失败，请检查网络');
+                console.error(e);
+            }
+        }
+
+        function copyShareLink() {
+            var input = document.getElementById('shareLink');
+            if (!input || !input.value) { showToast('请先生成二维码'); return; }
+            input.select();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(input.value).then(function() { showToast('✅ 已复制'); })['catch'](function() {
+                    document.execCommand('copy');
+                    showToast('✅ 已复制'); });
+            } else {
+                document.execCommand('copy');
+                showToast('✅ 已复制');
+            }
+        }
+
+        // ============================================================
+        //  扫码填报模式（队长视角）- 同样修复
+        // ============================================================
+        function initFillMode() {
+            var params = new URLSearchParams(window.location.search);
+            var fillData = params.get('fill');
+            if (fillData) {
+                try {
+                    var data = JSON.parse(decodeURIComponent(fillData));
+                    if (data.mode === 'fill') {
+                        renderFillPageForCaptain(data);
+                        return true;
+                    }
+                } catch (e) { console.error('解析失败', e); }
+            }
+            return false;
+        }
+
+        var captainTeamData = null;
+        var captainSelected = [];
+        var captainSelectedGender = null;
+
+        function renderFillPageForCaptain(data) {
+            var app = document.querySelector('.app');
+            if (!app) return;
+
+            var team = data;
+            var fillData = team.fillData || { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            var members = team.members || [];
+
+            captainTeamData = team;
+            captainSelected = [];
+            captainSelectedGender = null;
+
+            if (fillData.completed) {
+                app.innerHTML = renderCaptainCompletedView(team, fillData);
+                return;
+            }
+
+            var allUsed = true;
+            for (var i = 0; i < members.length; i++) {
+                if (fillData.usedPlayers.indexOf(members[i].name) === -1) { allUsed = false; break; }
+            }
+            if (allUsed && fillData.steps.length > 0) {
+                fillData.completed = true;
+                app.innerHTML = renderCaptainCompletedView(team, fillData);
+                return;
+            }
+
+            app.innerHTML = renderCaptainFillForm(team, fillData);
+        }
+
+        function renderCaptainFillForm(team, fillData) {
+            var steps = fillData.steps || [];
+            var currentCourt = fillData.currentCourt || [];
+            var usedPlayers = fillData.usedPlayers || [];
+            var stepNum = steps.length + 1;
+            var isFirstStep = steps.length === 0;
+
+            var availablePlayers = [];
+            for (var i = 0; i < team.members.length; i++) {
+                if (usedPlayers.indexOf(team.members[i].name) === -1) {
+                    availablePlayers.push(team.members[i]);
+                }
+            }
+
+            var html = '<div class="card" style="max-width:600px;margin:0 auto;">';
+            html += '<div class="flex-between">';
+            html += '<div><h1>📝 填报出场名单</h1>';
+            html += '<p class="subtitle">' + team.teamName + ' · 第 ' + stepNum + ' 步</p></div>';
+            html += '<span class="badge badge-blue">扫码填报</span>';
+            html += '</div>';
+
+            var totalSteps = team.members.length - 1;
+            if (totalSteps > 0) {
+                html += '<div class="step-indicator">';
+                for (var i = 1; i <= totalSteps; i++) {
+                    var cls = 'step-dot';
+                    if (i < stepNum) cls += ' done';
+                    if (i === stepNum) cls += ' active';
+                    html += '<span class="' + cls + '">' + i + '</span>';
+                }
+                html += '</div>';
+            }
+
+            html += '<div class="lineup-step-card" style="border-color:#48bb78;">';
+            html += '<div class="step-header">';
+            html += '<span class="step-number">📍 当前阵容</span>';
+            html += '<span class="step-action start">' + (isFirstStep ? '🌟 首发' : '🔄 换人') + '</span>';
+            html += '</div>';
+            html += '<div class="court-slots">';
+            var courtMale = null,
+                courtFemale = null;
+            for (var i = 0; i < currentCourt.length; i++) {
+                if (currentCourt[i].gender === 'male') courtMale = currentCourt[i];
+                else courtFemale = currentCourt[i];
+            }
+            html += '<div class="court-slot ' + (courtMale ? 'filled' : '') + '">';
+            html += '<div class="slot-label">♂ 男</div>';
+            html += '<div class="slot-name">' + (courtMale ? courtMale.name : '—') + '</div>';
+            html += '</div>';
+            html += '<div class="court-slot ' + (courtFemale ? 'filled' : '') + '">';
+            html += '<div class="slot-label">♀ 女</div>';
+            html += '<div class="slot-name">' + (courtFemale ? courtFemale.name : '—') + '</div>';
+            html += '</div>';
+            html += '</div>';
+
+            if (!isFirstStep) {
+                var lastStep = steps[steps.length - 1];
+                html += '<div class="sub-info">⬇ ' + (lastStep.substitutedOut || '') + ' 下场 → ⬆ ' + (lastStep
+                    .substitutedIn || '') + ' 上场</div>';
+            }
+            html += '</div>';
+
+            if (availablePlayers.length > 0) {
+                if (isFirstStep) {
+                    html += '<div style="margin-top:12px;font-weight:600;color:#2d3748;">请选择首发阵容（1男 + 1女）：</div>';
+                    html += '<div class="member-select-grid" id="captainMemberGrid">';
+                    for (var i = 0; i < availablePlayers.length; i++) {
+                        var p = availablePlayers[i];
+                        var icon = p.gender === 'male' ? '♂' : '♀';
+                        html += '<span class="member-option" onclick="captainSelectPlayer(\'' + p.name + '\', \'' + p
+                            .gender + '\')" data-name="' + p.name + '">' + p.name + ' ' + icon + '</span>';
+                    }
+                    html += '</div>';
+                    html += '<div class="mt-12">';
+                    html += '<button class="btn btn-success" onclick="captainConfirmStep()" id="captainConfirmBtn" disabled>';
+                    html += '✅ 确认首发阵容';
+                    html += '</button>';
+                    html += ' <span class="text-muted text-sm" id="captainStatus">请选择 1男 和 1女</span>';
+                    html += '</div>';
+                } else {
+                    // 换人：先选性别
+                    var hasMaleOnCourt = false;
+                    var hasFemaleOnCourt = false;
+                    for (var i = 0; i < currentCourt.length; i++) {
+                        if (currentCourt[i].gender === 'male') hasMaleOnCourt = true;
+                        else hasFemaleOnCourt = true;
+                    }
+                    var hasAvailableMale = false;
+                    var hasAvailableFemale = false;
+                    for (var i = 0; i < availablePlayers.length; i++) {
+                        if (availablePlayers[i].gender === 'male') hasAvailableMale = true;
+                        else hasAvailableFemale = true;
+                    }
+
+                    html += '<div style="margin-top:12px;font-weight:600;color:#2d3748;">第一步：选择要换下的性别</div>';
+                    html += '<div class="gender-select-group">';
+                    html += '<button class="gender-btn" id="captainGenderMale" onclick="captainSelectGender(\'male\')" ' +
+                        (hasMaleOnCourt && hasAvailableMale ? '' : 'disabled') + '>';
+                    html += '♂ 换男';
+                    if (!hasMaleOnCourt) html += ' (场上无男)';
+                    else if (!hasAvailableMale) html += ' (无替补)';
+                    html += '</button>';
+                    html += '<button class="gender-btn" id="captainGenderFemale" onclick="captainSelectGender(\'female\')" ' +
+                        (hasFemaleOnCourt && hasAvailableFemale ? '' : 'disabled') + '>';
+                    html += '♀ 换女';
+                    if (!hasFemaleOnCourt) html += ' (场上无女)';
+                    else if (!hasAvailableFemale) html += ' (无替补)';
+                    html += '</button>';
+                    html += '</div>';
+
+                    html += '<div class="text-muted text-sm" id="captainGenderDisplay" style="margin-bottom:8px;">';
+                    if (captainSelectedGender === 'male') html += '已选择：换下 ♂ 男队员';
+                    else if (captainSelectedGender === 'female') html += '已选择：换下 ♀ 女队员';
+                    else html += '请先选择要换下的性别';
+                    html += '</div>';
+
+                    html += '<div style="margin-top:8px;font-weight:600;color:#2d3748;">第二步：选择上场的队员</div>';
+                    html += '<div class="member-select-grid" id="captainMemberGrid">';
+                    var filtered = [];
+                    if (captainSelectedGender) {
+                        for (var i = 0; i < availablePlayers.length; i++) {
+                            if (availablePlayers[i].gender === captainSelectedGender) {
+                                filtered.push(availablePlayers[i]);
+                            }
+                        }
+                    }
+                    if (filtered.length === 0 && captainSelectedGender) {
+                        html += '<span class="text-muted text-sm">没有符合条件的未上场队员</span>';
+                    } else if (!captainSelectedGender) {
+                        html += '<span class="text-muted text-sm">请先选择要换下的性别</span>';
+                    } else {
+                        for (var i = 0; i < filtered.length; i++) {
+                            var p = filtered[i];
+                            var icon = p.gender === 'male' ? '♂' : '♀';
+                            html += '<span class="member-option" onclick="captainSelectPlayer(\'' + p.name + '\', \'' + p
+                                .gender + '\')" data-name="' + p.name + '">' + p.name + ' ' + icon + '</span>';
+                        }
+                    }
+                    html += '</div>';
+
+                    html += '<div class="mt-12">';
+                    html += '<button class="btn btn-success" onclick="captainConfirmStep()" id="captainConfirmBtn" disabled>';
+                    html += '✅ 确认换人';
+                    html += '</button>';
+                    html += ' <span class="text-muted text-sm" id="captainStatus">请选择要上场的队员</span>';
+                    html += '</div>';
+                }
+            } else {
+                html += '<div class="empty-state"><div class="icon">🎉</div><p>所有队员都已上场！排阵完成</p></div>';
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        // 队长端选择性别
+        function captainSelectGender(gender) {
+            captainSelectedGender = gender;
+            captainSelected = [];
+
+            var btnMale = document.getElementById('captainGenderMale');
+            var btnFemale = document.getElementById('captainGenderFemale');
+            if (btnMale) {
+                btnMale.className = 'gender-btn' + (gender === 'male' ? ' active-male' : '');
+            }
+            if (btnFemale) {
+                btnFemale.className = 'gender-btn' + (gender === 'female' ? ' active-female' : '');
+            }
+
+            var display = document.getElementById('captainGenderDisplay');
+            if (display) {
+                if (gender === 'male') display.textContent = '已选择：换下 ♂ 男队员';
+                else display.textContent = '已选择：换下 ♀ 女队员';
+            }
+
+            // 重新渲染成员选择
+            var team = getCaptainTeam();
+            if (team) {
+                var fillData = team.fillData || { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+                var grid = document.getElementById('captainMemberGrid');
+                if (grid) {
+                    var availablePlayers = [];
+                    var usedPlayers = fillData.usedPlayers || [];
+                    for (var i = 0; i < team.members.length; i++) {
+                        if (usedPlayers.indexOf(team.members[i].name) === -1) {
+                            availablePlayers.push(team.members[i]);
+                        }
+                    }
+                    var filtered = [];
+                    for (var i = 0; i < availablePlayers.length; i++) {
+                        if (availablePlayers[i].gender === gender) {
+                            filtered.push(availablePlayers[i]);
+                        }
+                    }
+                    var html = '';
+                    if (filtered.length === 0) {
+                        html = '<span class="text-muted text-sm">没有符合条件的未上场队员</span>';
+                    } else {
+                        for (var i = 0; i < filtered.length; i++) {
+                            var p = filtered[i];
+                            var icon = p.gender === 'male' ? '♂' : '♀';
+                            html += '<span class="member-option" onclick="captainSelectPlayer(\'' + p.name + '\', \'' + p
+                                .gender + '\')" data-name="' + p.name + '">' + p.name + ' ' + icon + '</span>';
+                        }
+                    }
+                    grid.innerHTML = html;
+                }
+            }
+
+            var status = document.getElementById('captainStatus');
+            if (status) {
+                status.textContent = '请选择要上场的队员';
+            }
+            var btn = document.getElementById('captainConfirmBtn');
+            if (btn) {
+                btn.disabled = true;
+            }
+        }
+
+        // 队长端选择队员
+        function captainSelectPlayer(name, gender) {
+            var team = getCaptainTeam();
+            if (!team) return;
+            var fillData = team.fillData || { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            var isFirstStep = fillData.steps.length === 0;
+
+            if (isFirstStep) {
+                var existing = captainSelected.find(function(p) { return p.name === name; });
+                if (existing) {
+                    captainSelected = captainSelected.filter(function(p) { return p.name !== name; });
+                } else {
+                    var sameGender = captainSelected.find(function(p) { return p.gender === gender; });
+                    if (sameGender) {
+                        captainSelected = captainSelected.filter(function(p) { return p.gender !== gender; });
+                    }
+                    captainSelected.push({ name: name, gender: gender });
+                }
+
+                var grid = document.getElementById('captainMemberGrid');
+                if (grid) {
+                    var options = grid.querySelectorAll('.member-option');
+                    for (var i = 0; i < options.length; i++) {
+                        var opt = options[i];
+                        var optName = opt.getAttribute('data-name');
+                        var isSelected = captainSelected.some(function(p) { return p.name === optName; });
+                        opt.classList.toggle('selected', isSelected);
+                    }
+                }
+
+                var btn = document.getElementById('captainConfirmBtn');
+                var status = document.getElementById('captainStatus');
+                if (btn && status) {
+                    var hasMale = captainSelected.some(function(p) { return p.gender === 'male'; });
+                    var hasFemale = captainSelected.some(function(p) { return p.gender === 'female'; });
+                    if (hasMale && hasFemale) {
+                        btn.disabled = false;
+                        status.textContent = '✅ 已选 1男 + 1女';
+                    } else {
+                        btn.disabled = true;
+                        status.textContent = '请选择 1男 和 1女';
+                    }
+                }
+            } else {
+                if (captainSelectedGender && gender !== captainSelectedGender) {
+                    showToast('⚠️ 请选择 ' + (captainSelectedGender === 'male' ? '男' : '女') + ' 队员');
+                    return;
+                }
+                var existing = captainSelected.find(function(p) { return p.name === name; });
+                if (existing) {
+                    captainSelected = [];
+                } else {
+                    captainSelected = [{ name: name, gender: gender }];
+                }
+
+                var grid = document.getElementById('captainMemberGrid');
+                if (grid) {
+                    var options = grid.querySelectorAll('.member-option');
+                    for (var i = 0; i < options.length; i++) {
+                        var opt = options[i];
+                        var optName = opt.getAttribute('data-name');
+                        var isSelected = captainSelected.some(function(p) { return p.name === optName; });
+                        opt.classList.toggle('selected', isSelected);
+                    }
+                }
+
+                var btn = document.getElementById('captainConfirmBtn');
+                var status = document.getElementById('captainStatus');
+                if (btn && status) {
+                    if (captainSelected.length === 1) {
+                        btn.disabled = false;
+                        status.textContent = '✅ 已选 ' + captainSelected[0].name;
+                    } else {
+                        btn.disabled = true;
+                        status.textContent = '请选择要上场的队员';
+                    }
+                }
+            }
+        }
+
+        // 队长端确认
+        function captainConfirmStep() {
+            var team = getCaptainTeam();
+            if (!team) { showToast('⚠️ 数据错误'); return; }
+
+            var fillData = team.fillData || { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            var isFirstStep = fillData.steps.length === 0;
+
+            if (captainSelected.length === 0) {
+                showToast('⚠️ 请先选择队员');
+                return;
+            }
+
+            var currentCourt = fillData.currentCourt || [];
+            var usedPlayers = fillData.usedPlayers || [];
+            var steps = fillData.steps || [];
+            var stepNum = steps.length + 1;
+
+            var newCourt = [];
+
+            if (isFirstStep) {
+                var male = captainSelected.find(function(p) { return p.gender === 'male'; });
+                var female = captainSelected.find(function(p) { return p.gender === 'female'; });
+                if (!male || !female) { showToast('⚠️ 请选择 1男 和 1女'); return; }
+                newCourt = [male, female];
+                usedPlayers = [male.name, female.name];
+                steps.push({
+                    step: stepNum,
+                    action: '首发',
+                    onCourt: [{ name: male.name, gender: male.gender }, { name: female.name, gender: female.gender }],
+                    substitutedOut: null,
+                    substitutedIn: null
+                });
+            } else {
+                var selected = captainSelected[0];
+                var toReplace = null;
+                for (var i = 0; i < currentCourt.length; i++) {
+                    if (currentCourt[i].gender === selected.gender) {
+                        toReplace = currentCourt[i];
+                        break;
+                    }
+                }
+                if (!toReplace) {
+                    showToast('⚠️ 场上没有同性别队员可换，请换另一个性别');
+                    return;
+                }
+
+                newCourt = [];
+                for (var i = 0; i < currentCourt.length; i++) {
+                    if (currentCourt[i].name !== toReplace.name) {
+                        newCourt.push(currentCourt[i]);
+                    }
+                }
+                newCourt.push(selected);
+                usedPlayers.push(selected.name);
+
+                steps.push({
+                    step: stepNum,
+                    action: '换人',
+                    onCourt: newCourt.map(function(p) { return { name: p.name, gender: p.gender }; }),
+                    substitutedOut: toReplace.name,
+                    substitutedIn: selected.name
+                });
+            }
+
+            fillData.currentCourt = newCourt;
+            fillData.usedPlayers = usedPlayers;
+            fillData.steps = steps;
+
+            var allMembers = team.members;
+            var allUsed = true;
+            for (var i = 0; i < allMembers.length; i++) {
+                if (usedPlayers.indexOf(allMembers[i].name) === -1) { allUsed = false; break; }
+            }
+            if (allUsed && steps.length > 0) {
+                fillData.completed = true;
+            }
+
+            var appData = getAppData();
+            var targetTeam = null;
+            for (var i = 0; i < appData.teams.length; i++) {
+                if (appData.teams[i].id === team.teamId) { targetTeam = appData.teams[i]; break; }
+            }
+            if (targetTeam) {
+                appData.fillData[team.teamId] = fillData;
+                saveAppData(appData);
+            }
+
+            captainSelected = [];
+            captainSelectedGender = null;
+            showToast('✅ 第 ' + stepNum + ' 步确认完成');
+
+            var params = new URLSearchParams(window.location.search);
+            var fillParam = params.get('fill');
+            if (fillParam) {
+                try {
+                    var data = JSON.parse(decodeURIComponent(fillParam));
+                    data.fillData = fillData;
+                    var encoded = encodeURIComponent(JSON.stringify(data));
+                    window.location.href = window.location.pathname + '?fill=' + encoded;
+                } catch (e) {
+                    location.reload();
+                }
+            }
+        }
+
+        function renderCaptainCompletedView(team, fillData) {
+            var html = '<div class="card" style="max-width:600px;margin:0 auto;">';
+            html += '<div class="flex-between">';
+            html += '<div><h1>🎉 排阵完成</h1>';
+            html += '<p class="subtitle">' + team.teamName + '</p></div>';
+            html += '<span class="badge badge-green">已完成</span>';
+            html += '</div>';
+
+            html += '<div style="margin-top:12px;">';
+            for (var i = 0; i < fillData.steps.length; i++) {
+                var s = fillData.steps[i];
+                html += '<div class="lineup-step-card">';
+                html += '<div class="step-header">';
+                html += '<span class="step-number">第 ' + s.step + ' 步</span>';
+                html += '<span class="step-action ' + (s.action === '首发' ? 'start' : '') + '">' +
+                    (s.action === '首发' ? '🌟 首发' : '🔄 换人') + '</span>';
+                html += '</div>';
+                html += '<div class="court-players">';
+                for (var j = 0; j < s.onCourt.length; j++) {
+                    var p = s.onCourt[j];
+                    html += '<span class="court-player ' + p.gender + '">' + p.name + ' ' + (p.gender === 'male' ? '♂' :
+                        '♀') + '</span>';
+                }
+                html += '</div>';
+                if (s.substitutedOut) {
+                    html += '<div class="sub-info">⬇ ' + s.substitutedOut + ' 下场 → ⬆ ' + s.substitutedIn + ' 上场</div>';
+                }
+                html += '</div>';
+            }
+            html += '</div>';
+
+            html += '<div style="margin-top:16px;padding:12px;background:#f0fff4;border-radius:10px;text-align:center;font-size:13px;color:#276749;">';
+            html += '✅ 所有 ' + team.members.length + ' 名队员都已上场<br>';
+            html += '💡 此页面为只读视图，修改请使用管理后台';
+            html += '</div>';
+
+            html += '</div>';
+            return html;
+        }
+
+        // ============================================================
+        //  初始化
+        // ============================================================
+        var dataLoaded = loadDataFromURL();
+        var isFillMode = initFillMode();
+
+        // 暴露全局函数
+        window.addMember = addMember;
+        window.removeMember = removeMember;
+        window.clearTeamMembers = clearTeamMembers;
+        window.loadExample = loadExample;
+        window.switchTeam = switchTeam;
+        window.switchTab = switchTab;
+        window.showAddTeamModal = showAddTeamModal;
+        window.closeAddTeamModal = closeAddTeamModal;
+        window.confirmAddTeam = confirmAddTeam;
+        window.exportAllData = exportAllData;
+        window.handleImport = handleImport;
+        window.generateShareQR = generateShareQR;
+        window.copyShareLink = copyShareLink;
+        window.renderFillPage = renderFillPage;
+        window.renderDataPage = renderDataPage;
+        window.renderMembers = renderMembers;
+        window.renderTeams = renderTeams;
+        window.selectFillPlayer = selectFillPlayer;
+        window.confirmFillStep = confirmFillStep;
+        window.resetFillData = resetFillData;
+        window.exportFillDataCSV = exportFillDataCSV;
+        window.exportFillDataJSON = exportFillDataJSON;
+        window.captainSelectPlayer = captainSelectPlayer;
+        window.captainSelectGender = captainSelectGender;
+        window.captainConfirmStep = captainConfirmStep;
+        window.showDeleteTeamModal = showDeleteTeamModal;
+        window.closeDeleteTeamModal = closeDeleteTeamModal;
+        window.confirmDeleteTeam = confirmDeleteTeam;
+        window.deleteTeam = deleteTeam;
+        window.generateShareURL = generateShareURL;
+        window.copyShareURL = copyShareURL;
+        window.showShareURLModal = showShareURLModal;
+        window.closeShareURLModal = closeShareURLModal;
+        window.generateShareQRFromURL = generateShareQRFromURL;
+        window.selectReplaceGender = selectReplaceGender;
+
+        if (!isFillMode) {
+            renderTeams();
+            renderMembers();
+            renderFillPage();
+            renderDataPage();
+            console.log('✅ 系统初始化完成 - 管理员模式');
+            if (dataLoaded) {
+                console.log('✅ 已从URL加载数据');
+            }
+        } else {
+            console.log('✅ 系统初始化完成 - 扫码填报模式');
+        }
+    </script>
+
+</body>
+</html>
