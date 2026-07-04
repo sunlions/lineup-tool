@@ -683,6 +683,28 @@
             opacity: 0.4;
             cursor: not-allowed;
         }
+
+        /* 数据更新提示 */
+        .data-update-banner {
+            background: #ebf8ff;
+            border: 1px solid #bee3f8;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .data-update-banner .msg {
+            color: #2b6cb0;
+            font-size: 14px;
+        }
+        .data-update-banner .time {
+            color: #718096;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -781,6 +803,7 @@
                 <div class="flex">
                     <button class="btn btn-success btn-sm" onclick="exportFillDataCSV()">📥 导出CSV</button>
                     <button class="btn btn-outline btn-sm" onclick="exportFillDataJSON()">📄 导出JSON</button>
+                    <button class="btn btn-warning btn-sm" onclick="refreshDataDisplay()">🔄 刷新数据</button>
                 </div>
             </div>
             <div id="dataContainer">
@@ -903,6 +926,8 @@
 
         function saveAppData(data) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            // 触发数据更新事件
+            window.dispatchEvent(new Event('dataUpdated'));
         }
 
         function getCurrentTeam() {
@@ -1853,7 +1878,7 @@
         }
 
         // ============================================================
-        //  数据导出
+        //  ===== 数据导出（后台查看） =====
         // ============================================================
         function renderDataPage() {
             var container = document.getElementById('dataContainer');
@@ -1869,7 +1894,15 @@
                 return;
             }
 
-            var html = '<div style="overflow-x:auto;">';
+            // 显示数据更新时间
+            var updateTime = fillData.generatedAt ? new Date(fillData.generatedAt).toLocaleString() : '未知';
+
+            var html = '<div class="data-update-banner">';
+            html += '<span class="msg">📋 当前显示的是 <strong>' + team.name + '</strong> 的填报数据</span>';
+            html += '<span class="time">🕐 数据更新于：' + updateTime + '</span>';
+            html += '</div>';
+
+            html += '<div style="overflow-x:auto;">';
             html += '<table class="data-table">';
             html += '<thead><tr><th>步骤</th><th>动作</th><th>场上球员1</th><th>场上球员2</th><th>换下</th><th>换上</th></tr></thead>';
             html += '<tbody>';
@@ -1895,6 +1928,24 @@
             container.innerHTML = html;
         }
 
+        // 刷新数据（手动触发）
+        function refreshDataDisplay() {
+            renderDataPage();
+            showToast('✅ 数据已刷新');
+        }
+
+        // 监听数据更新事件
+        window.addEventListener('dataUpdated', function() {
+            // 如果当前在数据导出标签页，自动刷新
+            var dataTab = document.getElementById('tab-data');
+            if (dataTab && !dataTab.classList.contains('hidden')) {
+                renderDataPage();
+            }
+        });
+
+        // ============================================================
+        //  数据导出（CSV/JSON）
+        // ============================================================
         function exportFillDataCSV() {
             var team = getCurrentTeam();
             if (!team) { showToast('请选择团队'); return; }
@@ -2041,7 +2092,7 @@
         }
 
         // ============================================================
-        //  ===== 修复：扫码填报模式（队长视角） =====
+        //  ===== 扫码填报模式（队长视角） =====
         // ============================================================
         function initFillMode() {
             var params = new URLSearchParams(window.location.search);
@@ -2058,7 +2109,6 @@
             return false;
         }
 
-        // 队长端全局状态
         var captainTeamData = null;
         var captainSelected = [];
         var captainSelectedGender = null;
@@ -2067,7 +2117,6 @@
             var app = document.querySelector('.app');
             if (!app) return;
 
-            // 保存数据到全局
             captainTeamData = data;
             captainSelected = [];
             captainSelectedGender = null;
@@ -2173,7 +2222,6 @@
                     html += ' <span class="text-muted text-sm" id="captainStatus">请选择 1男 和 1女</span>';
                     html += '</div>';
                 } else {
-                    // 换人
                     var hasMaleOnCourt = false;
                     var hasFemaleOnCourt = false;
                     for (var i = 0; i < currentCourt.length; i++) {
@@ -2248,7 +2296,6 @@
             return html;
         }
 
-        // 队长端：选择性别
         function captainSelectGender(gender) {
             captainSelectedGender = gender;
             captainSelected = [];
@@ -2268,7 +2315,6 @@
                 else display.textContent = '已选择：换下 ♀ 女队员';
             }
 
-            // 重新渲染成员选择
             var team = captainTeamData;
             if (team) {
                 var fillData = team.fillData || { steps: [], currentCourt: [], usedPlayers: [], completed: false };
@@ -2312,7 +2358,6 @@
             }
         }
 
-        // 队长端：选择队员
         function captainSelectPlayer(name, gender) {
             var team = captainTeamData;
             if (!team) return;
@@ -2320,10 +2365,7 @@
             var fillData = team.fillData || { steps: [], currentCourt: [], usedPlayers: [], completed: false };
             var isFirstStep = fillData.steps.length === 0;
 
-            console.log('队长选人:', name, gender, 'isFirstStep:', isFirstStep);
-
             if (isFirstStep) {
-                // 首发：选1男1女
                 var existing = captainSelected.find(function(p) { return p.name === name; });
                 if (existing) {
                     captainSelected = captainSelected.filter(function(p) { return p.name !== name; });
@@ -2360,7 +2402,6 @@
                     }
                 }
             } else {
-                // 换人：只能选1人
                 if (captainSelectedGender && gender !== captainSelectedGender) {
                     showToast('⚠️ 请选择 ' + (captainSelectedGender === 'male' ? '男' : '女') + ' 队员');
                     return;
@@ -2397,7 +2438,6 @@
             }
         }
 
-        // 队长端：确认步骤
         function captainConfirmStep() {
             var team = captainTeamData;
             if (!team) { showToast('⚠️ 数据错误，请重新扫码'); return; }
@@ -2584,11 +2624,11 @@
         window.closeShareURLModal = closeShareURLModal;
         window.generateShareQRFromURL = generateShareQRFromURL;
         window.selectReplaceGender = selectReplaceGender;
-        // 队长端函数
         window.captainSelectGender = captainSelectGender;
         window.captainSelectPlayer = captainSelectPlayer;
         window.captainConfirmStep = captainConfirmStep;
         window.renderFillPageForCaptain = renderFillPageForCaptain;
+        window.refreshDataDisplay = refreshDataDisplay;
 
         if (!isFillMode) {
             renderTeams();
