@@ -86,6 +86,7 @@
                 grid-template-columns: 1fr;
             }
         }
+
         .form-group {
             margin-bottom: 14px;
         }
@@ -110,6 +111,7 @@
             border-color: #4299e1;
             outline: none;
         }
+
         .btn {
             padding: 10px 22px;
             border: none;
@@ -169,13 +171,7 @@
         .btn-purple:hover {
             background: #805ad5;
         }
-        .btn-warning {
-            background: #ed8936;
-            color: white;
-        }
-        .btn-warning:hover {
-            background: #dd6b20;
-        }
+
         .team-selector {
             display: flex;
             gap: 10px;
@@ -218,6 +214,7 @@
         .team-tab .delete-team-btn:hover {
             color: #e53e3e;
         }
+
         .member-tag {
             display: inline-flex;
             align-items: center;
@@ -254,6 +251,7 @@
         .member-tag .remove-btn:hover {
             color: #e53e3e;
         }
+
         .member-list {
             min-height: 60px;
             background: #f7fafc;
@@ -271,6 +269,7 @@
             padding: 16px 0;
             font-size: 14px;
         }
+
         .tab-bar {
             display: flex;
             gap: 8px;
@@ -293,6 +292,7 @@
         .tab:hover:not(.active) {
             background: #e2e8f0;
         }
+
         .toast {
             position: fixed;
             bottom: 30px;
@@ -313,6 +313,7 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
+
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -322,6 +323,7 @@
             font-size: 48px;
             margin-bottom: 12px;
         }
+
         .badge {
             display: inline-block;
             padding: 2px 10px;
@@ -341,6 +343,7 @@
             background: #e9d8fd;
             color: #6b46c1;
         }
+
         .modal-overlay {
             display: none;
             position: fixed;
@@ -365,6 +368,7 @@
             max-height: 90vh;
             overflow-y: auto;
         }
+
         .lineup-step-card {
             background: #f7fafc;
             border-radius: 12px;
@@ -420,6 +424,7 @@
             color: #e53e3e;
             margin-top: 6px;
         }
+
         .member-select-grid {
             display: flex;
             flex-wrap: wrap;
@@ -451,6 +456,7 @@
             opacity: 0.4;
             cursor: not-allowed;
         }
+
         .court-slots {
             display: flex;
             gap: 20px;
@@ -483,6 +489,7 @@
             font-size: 18px;
             color: #2d3748;
         }
+
         .qr-box {
             display: flex;
             flex-direction: column;
@@ -508,6 +515,7 @@
             background: white;
             font-size: 13px;
         }
+
         .fill-container .step-indicator {
             display: flex;
             justify-content: center;
@@ -534,6 +542,7 @@
             background: #48bb78;
             color: white;
         }
+
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -549,6 +558,7 @@
             padding: 8px 12px;
             border-bottom: 1px solid #e2e8f0;
         }
+
         .gender-select-group {
             display: flex;
             gap: 12px;
@@ -581,26 +591,7 @@
             opacity: 0.4;
             cursor: not-allowed;
         }
-        .data-update-banner {
-            background: #ebf8ff;
-            border: 1px solid #bee3f8;
-            border-radius: 10px;
-            padding: 12px 16px;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .data-update-banner .msg {
-            color: #2b6cb0;
-            font-size: 14px;
-        }
-        .data-update-banner .time {
-            color: #718096;
-            font-size: 13px;
-        }
+
         .connection-status {
             display: inline-flex;
             align-items: center;
@@ -608,26 +599,55 @@
             font-size: 13px;
             padding: 4px 12px;
             border-radius: 12px;
-        }
-        .connection-status.connected {
             background: #c6f6d5;
             color: #276749;
-        }
-        .connection-status.disconnected {
-            background: #fed7d7;
-            color: #9b2c2c;
         }
         .connection-status .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
             display: inline-block;
-        }
-        .connection-status.connected .dot {
             background: #38a169;
         }
-        .connection-status.disconnected .dot {
-            background: #e53e3e;
+
+        .version-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f7fafc;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border-left: 4px solid #805ad5;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .version-item .version-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .version-item .version-info .version-time {
+            font-size: 13px;
+            color: #2d3748;
+            font-weight: 600;
+        }
+        .version-item .version-info .version-note {
+            font-size: 12px;
+            color: #718096;
+        }
+        .version-item .version-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .version-item .version-actions .btn {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+        .version-item.current-version {
+            border-left-color: #48bb78;
+            background: #f0fff4;
         }
     </style>
 </head>
@@ -641,15 +661,15 @@
             <div class="flex-between">
                 <div>
                     <h1>🏸 排兵布阵系统</h1>
-                    <p class="subtitle">云开发版 · 多团队汇总</p>
+                    <p class="subtitle">本地版 · 多版本记录</p>
                 </div>
                 <div class="flex">
-                    <span id="connectionStatus" class="connection-status disconnected">
-                        <span class="dot"></span> 连接中...
+                    <span class="connection-status">
+                        <span class="dot"></span> 数据存于本地
                     </span>
-                    <button class="btn btn-outline btn-sm" onclick="exportAllData()">💾 导出</button>
-                    <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()">📥 导入</button>
-                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+                    <button class="btn btn-outline btn-sm" id="exportBtn">💾 导出</button>
+                    <button class="btn btn-outline btn-sm" id="importBtn">📥 导入</button>
+                    <input type="file" id="importFile" accept=".json" style="display:none">
                 </div>
             </div>
         </div>
@@ -658,16 +678,16 @@
         <div class="card">
             <div class="flex-between">
                 <div class="team-selector" id="teamSelector"></div>
-                <button class="btn btn-primary btn-sm" onclick="showAddTeamModal()">➕ 新建团队</button>
+                <button class="btn btn-primary btn-sm" id="addTeamBtn">➕ 新建团队</button>
             </div>
         </div>
 
         <!-- Tabs -->
         <div class="tab-bar">
-            <button class="tab active" data-tab="members" onclick="switchTab('members')">👥 成员</button>
-            <button class="tab" data-tab="fill" onclick="switchTab('fill')">📝 填报</button>
-            <button class="tab" data-tab="data" onclick="switchTab('data')">📊 数据</button>
-            <button class="tab" data-tab="share" onclick="switchTab('share')">📱 二维码</button>
+            <button class="tab active" data-tab="members">👥 成员</button>
+            <button class="tab" data-tab="fill">📝 填报</button>
+            <button class="tab" data-tab="versions">📚 历史版本</button>
+            <button class="tab" data-tab="share">📱 二维码</button>
         </div>
 
         <!-- ===== TAB 1: 成员管理 ===== -->
@@ -678,7 +698,7 @@
                     <p class="subtitle" style="margin-bottom:12px;">当前：<strong id="currentTeamName">-</strong></p>
                     <div class="form-group">
                         <label>👤 姓名</label>
-                        <input type="text" id="memberName" placeholder="输入姓名" onkeydown="if(event.key==='Enter'){event.preventDefault();addMember();}">
+                        <input type="text" id="memberName" placeholder="输入姓名">
                     </div>
                     <div class="form-group">
                         <label>⚧ 性别</label>
@@ -687,10 +707,10 @@
                             <option value="female">♀ 女</option>
                         </select>
                     </div>
-                    <button class="btn btn-primary btn-block" onclick="addMember()">➕ 添加</button>
+                    <button class="btn btn-primary btn-block" id="addMemberBtn">➕ 添加</button>
                     <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-                        <button class="btn btn-sm btn-outline" onclick="loadExample()">📥 示例</button>
-                        <button class="btn btn-sm btn-danger" onclick="clearTeamMembers()">🗑 清空</button>
+                        <button class="btn btn-sm btn-outline" id="loadExampleBtn">📥 示例</button>
+                        <button class="btn btn-sm btn-danger" id="clearMembersBtn">🗑 清空</button>
                     </div>
                 </div>
                 <div>
@@ -711,7 +731,8 @@
                 <h2>📝 填报出场名单</h2>
                 <div class="flex">
                     <span class="text-muted text-sm">当前：<strong id="fillTeamName">-</strong></span>
-                    <button class="btn btn-danger btn-sm" onclick="resetFillData()">🔄 重置</button>
+                    <button class="btn btn-danger btn-sm" id="resetFillBtn">🔄 重置</button>
+                    <button class="btn btn-success btn-sm" id="saveVersionBtn">💾 保存版本</button>
                 </div>
             </div>
             <div id="fillContainer">
@@ -719,18 +740,17 @@
             </div>
         </div>
 
-        <!-- ===== TAB 3: 数据导出 ===== -->
-        <div class="card hidden" id="tab-data">
+        <!-- ===== TAB 3: 历史版本 ===== -->
+        <div class="card hidden" id="tab-versions">
             <div class="flex-between mb-12">
-                <h2>📊 已填报数据</h2>
+                <h2>📚 历史排阵版本</h2>
                 <div class="flex">
-                    <button class="btn btn-success btn-sm" onclick="exportFillDataCSV()">📥 CSV</button>
-                    <button class="btn btn-outline btn-sm" onclick="exportFillDataJSON()">📄 JSON</button>
-                    <button class="btn btn-warning btn-sm" onclick="renderDataPage()">🔄 刷新</button>
+                    <span class="text-muted text-sm" id="versionCount">共 0 个版本</span>
+                    <button class="btn btn-danger btn-sm" id="clearVersionsBtn">🗑 清空所有</button>
                 </div>
             </div>
-            <div id="dataContainer">
-                <div class="empty-state"><div class="icon">📊</div><p>暂无数据</p></div>
+            <div id="versionContainer">
+                <div class="empty-state"><div class="icon">📚</div><p>暂无历史版本</p></div>
             </div>
         </div>
 
@@ -741,9 +761,9 @@
                 <div id="qrcode"></div>
                 <div class="share-link">
                     <input type="text" id="shareLink" readonly placeholder="生成后显示链接">
-                    <button class="btn btn-primary" onclick="copyShareLink()">📋 复制</button>
+                    <button class="btn btn-primary" id="copyShareBtn">📋 复制</button>
                 </div>
-                <button class="btn btn-success" onclick="generateShareQR()">🔄 生成二维码</button>
+                <button class="btn btn-success" id="generateQRBtn">🔄 生成二维码</button>
             </div>
             <div class="mt-12" style="background:#ebf8ff;padding:14px 18px;border-radius:12px;border-left:4px solid #4299e1;">
                 <p style="font-size:14px;color:#2b6cb0;">💡 首发1男1女 → 之后每次换1人（同性别替补）</p>
@@ -758,11 +778,11 @@
             <p class="text-muted" style="margin-bottom:16px;">输入团队名称</p>
             <div class="form-group">
                 <label>名称</label>
-                <input type="text" id="newTeamNameInput" placeholder="例如：红队" onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddTeam();}">
+                <input type="text" id="newTeamNameInput" placeholder="例如：红队">
             </div>
             <div style="display:flex;gap:10px;margin-top:8px;">
-                <button class="btn btn-primary" style="flex:1;" onclick="confirmAddTeam()">✅ 创建</button>
-                <button class="btn btn-outline" style="flex:1;" onclick="closeAddTeamModal()">取消</button>
+                <button class="btn btn-primary" style="flex:1;" id="confirmTeamBtn">✅ 创建</button>
+                <button class="btn btn-outline" style="flex:1;" id="closeTeamBtn">取消</button>
             </div>
         </div>
     </div>
@@ -774,275 +794,127 @@
             <div style="text-align:center;color:#e53e3e;font-weight:600;margin-bottom:8px;">确定删除该团队？</div>
             <div class="text-muted text-sm" style="text-align:center;margin-bottom:16px;" id="deleteTeamDetail">不可恢复！</div>
             <div style="display:flex;gap:10px;">
-                <button class="btn btn-danger" style="flex:1;" onclick="confirmDeleteTeam()">🗑 确认</button>
-                <button class="btn btn-outline" style="flex:1;" onclick="closeDeleteTeamModal()">取消</button>
+                <button class="btn btn-danger" style="flex:1;" id="confirmDeleteBtn">🗑 确认</button>
+                <button class="btn btn-outline" style="flex:1;" id="closeDeleteBtn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 查看版本弹窗 ===== -->
+    <div class="modal-overlay" id="viewVersionModal">
+        <div class="modal-box" style="max-width:600px;">
+            <div class="flex-between mb-12">
+                <h2 style="margin-bottom:0;" id="viewVersionTitle">📋 版本详情</h2>
+                <button class="btn btn-sm btn-outline" id="closeViewBtn">✕</button>
+            </div>
+            <div id="viewVersionContent" style="max-height:400px;overflow-y:auto;"></div>
+            <div style="display:flex;gap:10px;margin-top:16px;">
+                <button class="btn btn-success btn-sm" style="flex:1;" id="restoreVersionBtn">🔄 恢复此版本</button>
+                <button class="btn btn-outline btn-sm" style="flex:1;" id="closeViewBtn2">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 保存版本弹窗 ===== -->
+    <div class="modal-overlay" id="saveVersionModal">
+        <div class="modal-box">
+            <h2 style="margin-bottom:12px;">💾 保存版本</h2>
+            <p class="text-muted" style="margin-bottom:16px;">为当前排阵添加备注</p>
+            <div class="form-group">
+                <label>版本备注（可选）</label>
+                <input type="text" id="versionNoteInput" placeholder="例如：第一局、决赛...">
+            </div>
+            <div style="display:flex;gap:10px;margin-top:8px;">
+                <button class="btn btn-success" style="flex:1;" id="confirmSaveVersionBtn">💾 保存</button>
+                <button class="btn btn-outline" style="flex:1;" id="cancelSaveVersionBtn">取消</button>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================================
-        //  ===== 云开发配置 =====
+        //  数据层
         // ============================================================
-        var ENV_ID = 'sunlion-1-d3g7qiwbv2dcdfb51';
+        var STORAGE_KEY = 'lineup_local_system_v5';
 
-        // ============================================================
-        //  ===== 云开发初始化 =====
-        // ============================================================
-        var app = null;
-        var db = null;
-        var isCloudReady = false;
-
-        function initCloud() {
+        function getAppData() {
             try {
-                // 检查 SDK 是否加载
-                if (typeof cloudbase === 'undefined') {
-                    console.error('❌ cloudbase SDK 未加载，尝试等待...');
-                    // 等待 SDK 加载
-                    setTimeout(function() {
-                        if (typeof cloudbase !== 'undefined') {
-                            doInitCloud();
-                        } else {
-                            updateConnectionStatus(false, 'SDK加载失败');
-                            showToast('⚠️ 云开发SDK加载失败，请刷新重试');
-                        }
-                    }, 2000);
-                    return false;
-                }
-                return doInitCloud();
-            } catch (e) {
-                console.error('❌ 初始化失败:', e);
-                updateConnectionStatus(false, '连接失败');
-                return false;
-            }
-        }
-
-        function doInitCloud() {
-            try {
-                app = cloudbase.init({ env: ENV_ID });
-                db = app.database();
-                isCloudReady = true;
-                updateConnectionStatus(true, '已连接');
-                console.log('✅ 云开发初始化成功');
-                // 同步数据
-                syncFromCloud();
-                return true;
-            } catch (e) {
-                console.error('❌ 云开发初始化失败:', e);
-                updateConnectionStatus(false, '连接失败');
-                return false;
-            }
-        }
-
-        function updateConnectionStatus(connected, msg) {
-            var el = document.getElementById('connectionStatus');
-            if (!el) return;
-            el.className = 'connection-status ' + (connected ? 'connected' : 'disconnected');
-            el.innerHTML = '<span class="dot"></span> ' + msg;
-        }
-
-        // ============================================================
-        //  ===== 云数据库操作 =====
-        // ============================================================
-
-        async function fetchTeams() {
-            if (!isCloudReady) return [];
-            try {
-                var res = await db.collection('teams').get();
-                return res.data || [];
-            } catch (e) {
-                console.error('获取团队失败:', e);
-                return [];
-            }
-        }
-
-        async function addTeamToCloud(name) {
-            if (!isCloudReady) {
-                showToast('⚠️ 云开发未连接');
-                return null;
-            }
-            try {
-                var res = await db.collection('teams').add({
-                    name: name,
-                    members: [],
-                    createdAt: new Date()
-                });
-                return res;
-            } catch (e) {
-                console.error('添加团队失败:', e);
-                showToast('⚠️ 添加失败: ' + e.message);
-                return null;
-            }
-        }
-
-        async function updateTeamInCloud(teamId, data) {
-            if (!isCloudReady) return false;
-            try {
-                await db.collection('teams').doc(teamId).update(data);
-                return true;
-            } catch (e) {
-                console.error('更新团队失败:', e);
-                return false;
-            }
-        }
-
-        async function deleteTeamFromCloud(teamId) {
-            if (!isCloudReady) return false;
-            try {
-                await db.collection('teams').doc(teamId).remove();
-                await db.collection('lineups').where({ teamId: teamId }).remove();
-                return true;
-            } catch (e) {
-                console.error('删除团队失败:', e);
-                return false;
-            }
-        }
-
-        async function fetchLineup(teamId) {
-            if (!isCloudReady) return null;
-            try {
-                var res = await db.collection('lineups').where({ teamId: teamId }).get();
-                return res.data.length > 0 ? res.data[0] : null;
-            } catch (e) {
-                console.error('获取排阵失败:', e);
-                return null;
-            }
-        }
-
-        async function saveLineupToCloud(teamId, lineupData) {
-            if (!isCloudReady) return false;
-            try {
-                var existing = await db.collection('lineups').where({ teamId: teamId }).get();
-                if (existing.data.length > 0) {
-                    await db.collection('lineups').doc(existing.data[0]._id).update({
-                        steps: lineupData.steps || [],
-                        currentCourt: lineupData.currentCourt || [],
-                        usedPlayers: lineupData.usedPlayers || [],
-                        completed: lineupData.completed || false,
-                        updatedAt: new Date()
-                    });
-                } else {
-                    await db.collection('lineups').add({
-                        teamId: teamId,
-                        steps: lineupData.steps || [],
-                        currentCourt: lineupData.currentCourt || [],
-                        usedPlayers: lineupData.usedPlayers || [],
-                        completed: lineupData.completed || false,
-                        createdAt: new Date(),
-                        updatedAt: new Date()
-                    });
-                }
-                return true;
-            } catch (e) {
-                console.error('保存排阵失败:', e);
-                return false;
-            }
-        }
-
-        // ============================================================
-        //  ===== 本地缓存 =====
-        // ============================================================
-        var LOCAL_CACHE_KEY = 'lineup_cloud_cache';
-
-        function getCachedData() {
-            try {
-                var raw = localStorage.getItem(LOCAL_CACHE_KEY);
+                var raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
                     var data = JSON.parse(raw);
-                    if (data.teams) return data;
+                    if (data.teams && data.currentTeamId !== undefined) {
+                        return data;
+                    }
                 }
-            } catch (e) { console.error('读取缓存失败', e); }
-            return { teams: [], lineups: {} };
+            } catch (e) { console.error('数据解析失败', e); }
+            return {
+                teams: [],
+                currentTeamId: null,
+                fillData: {},
+                versions: {}
+            };
         }
 
-        function saveCache(data) {
-            localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify(data));
-        }
-
-        async function syncFromCloud() {
-            if (!isCloudReady) {
-                return;
-            }
-
-            try {
-                var teams = await fetchTeams();
-                var cache = { teams: teams, lineups: {} };
-
-                for (var i = 0; i < teams.length; i++) {
-                    var lineup = await fetchLineup(teams[i]._id);
-                    if (lineup) {
-                        cache.lineups[teams[i]._id] = {
-                            steps: lineup.steps || [],
-                            currentCourt: lineup.currentCourt || [],
-                            usedPlayers: lineup.usedPlayers || [],
-                            completed: lineup.completed || false
-                        };
-                    }
-                }
-
-                saveCache(cache);
-
-                var config = getConfig();
-                if (teams.length > 0) {
-                    var found = false;
-                    for (var j = 0; j < teams.length; j++) {
-                        if (teams[j]._id === config.currentTeamId) { found = true; break; }
-                    }
-                    if (!found) {
-                        config.currentTeamId = teams[0]._id;
-                        saveConfig(config);
-                    }
-                } else {
-                    config.currentTeamId = null;
-                    saveConfig(config);
-                }
-
+        function saveAppData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            // 延迟执行渲染，确保 DOM 已更新
+            setTimeout(function() {
                 renderAll();
-            } catch (e) {
-                console.error('同步失败:', e);
-            }
-        }
-
-        // ============================================================
-        //  ===== 配置管理 =====
-        // ============================================================
-        var CONFIG_KEY = 'lineup_app_config';
-
-        function getConfig() {
-            try {
-                var raw = localStorage.getItem(CONFIG_KEY);
-                if (raw) {
-                    var data = JSON.parse(raw);
-                    if (data.currentTeamId !== undefined) return data;
-                }
-            } catch (e) { console.error('读取配置失败', e); }
-            return { currentTeamId: null };
-        }
-
-        function saveConfig(data) {
-            localStorage.setItem(CONFIG_KEY, JSON.stringify(data));
+            }, 50);
         }
 
         function getCurrentTeam() {
-            var config = getConfig();
-            var cache = getCachedData();
-            if (config.currentTeamId) {
-                for (var i = 0; i < cache.teams.length; i++) {
-                    if (cache.teams[i]._id === config.currentTeamId) {
-                        return cache.teams[i];
-                    }
-                }
+            var data = getAppData();
+            if (!data.currentTeamId && data.teams.length > 0) {
+                data.currentTeamId = data.teams[0].id;
+                saveAppData(data);
             }
-            return cache.teams.length > 0 ? cache.teams[0] : null;
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === data.currentTeamId) return data.teams[i];
+            }
+            return data.teams[0] || null;
         }
 
-        function getTeamLineup(teamId) {
-            var cache = getCachedData();
-            return cache.lineups[teamId] || null;
+        function getTeam(teamId) {
+            var data = getAppData();
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === teamId) return data.teams[i];
+            }
+            return null;
+        }
+
+        function getFillData(teamId) {
+            var data = getAppData();
+            if (!data.fillData[teamId]) {
+                data.fillData[teamId] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+                saveAppData(data);
+            }
+            return data.fillData[teamId];
+        }
+
+        function saveFillData(teamId, fillData) {
+            var data = getAppData();
+            data.fillData[teamId] = fillData;
+            saveAppData(data);
+        }
+
+        function getVersions(teamId) {
+            var data = getAppData();
+            if (!data.versions[teamId]) {
+                data.versions[teamId] = [];
+                saveAppData(data);
+            }
+            return data.versions[teamId];
+        }
+
+        function saveVersions(teamId, versions) {
+            var data = getAppData();
+            data.versions[teamId] = versions;
+            saveAppData(data);
         }
 
         // ============================================================
-        //  ===== Toast =====
+        //  Toast
         // ============================================================
         var toastTimer = null;
 
@@ -1056,7 +928,18 @@
         }
 
         // ============================================================
-        //  ===== Tab切换 =====
+        //  渲染所有
+        // ============================================================
+        function renderAll() {
+            console.log('🔄 renderAll 被调用');
+            renderTeams();
+            renderMembers();
+            renderFillPage();
+            renderVersions();
+        }
+
+        // ============================================================
+        //  Tab切换
         // ============================================================
         function switchTab(tab) {
             var tabs = document.querySelectorAll('.tab');
@@ -1067,135 +950,154 @@
             for (var i = 0; i < cards.length; i++) {
                 cards[i].classList.toggle('hidden', cards[i].id !== 'tab-' + tab);
             }
-            if (tab === 'members') renderMembers();
-            if (tab === 'fill') renderFillPage();
-            if (tab === 'data') renderDataPage();
+            renderAll();
         }
 
         // ============================================================
-        //  ===== 渲染函数 =====
+        //  团队管理
         // ============================================================
-        function renderAll() {
-            renderTeams();
-            renderMembers();
-            renderFillPage();
-            renderDataPage();
-        }
-
         function renderTeams() {
-            var cache = getCachedData();
+            var data = getAppData();
             var container = document.getElementById('teamSelector');
             if (!container) return;
 
-            var config = getConfig();
-
-            if (cache.teams.length === 0) {
+            if (data.teams.length === 0) {
                 container.innerHTML = '<span class="text-muted text-sm">暂无团队，请创建</span>';
-                var nameEl = document.getElementById('currentTeamName');
-                if (nameEl) nameEl.textContent = '-';
+                document.getElementById('currentTeamName').textContent = '-';
+                document.getElementById('fillTeamName').textContent = '-';
                 return;
             }
 
             var html = '';
-            for (var i = 0; i < cache.teams.length; i++) {
-                var team = cache.teams[i];
-                var active = team._id === config.currentTeamId ? 'active' : '';
+            for (var i = 0; i < data.teams.length; i++) {
+                var team = data.teams[i];
+                var active = team.id === data.currentTeamId ? 'active' : '';
+                var vCount = data.versions[team.id] ? data.versions[team.id].length : 0;
                 html += '<span class="team-tab ' + active + '">' +
-                    '<span onclick="switchTeam(\'' + team._id + '\')">' +
+                    '<span onclick="switchTeam(\'' + team.id + '\')">' +
                     team.name +
                     '<span class="count">(' + (team.members ? team.members.length : 0) + ')</span>' +
+                    (vCount > 0 ? ' <span style="font-size:10px;background:#e9d8fd;padding:0 8px;border-radius:10px;color:#6b46c1;">' +
+                        vCount + '</span>' : '') +
                     '</span>' +
-                    '<button class="delete-team-btn" onclick="event.stopPropagation();showDeleteTeamModal(\'' + team._id +
+                    '<button class="delete-team-btn" onclick="event.stopPropagation();showDeleteTeamModal(\'' + team.id +
                     '\')">×</button>' +
                     '</span>';
             }
             container.innerHTML = html;
 
             var current = getCurrentTeam();
-            var nameEl = document.getElementById('currentTeamName');
-            if (nameEl) nameEl.textContent = current ? current.name : '-';
-
-            var fillNameEl = document.getElementById('fillTeamName');
-            if (fillNameEl) fillNameEl.textContent = current ? current.name : '-';
+            document.getElementById('currentTeamName').textContent = current ? current.name : '-';
+            document.getElementById('fillTeamName').textContent = current ? current.name : '-';
         }
 
         function switchTeam(teamId) {
-            var config = getConfig();
-            config.currentTeamId = teamId;
-            saveConfig(config);
+            var data = getAppData();
+            data.currentTeamId = teamId;
+            saveAppData(data);
             renderAll();
-            var qrContainer = document.getElementById('qrcode');
-            if (qrContainer) qrContainer.innerHTML = '';
-            var shareLink = document.getElementById('shareLink');
-            if (shareLink) shareLink.value = '';
+            document.getElementById('qrcode').innerHTML = '';
+            document.getElementById('shareLink').value = '';
         }
 
-        // ============================================================
-        //  ===== 团队操作 =====
-        // ============================================================
         function showAddTeamModal() {
-            var modal = document.getElementById('addTeamModal');
-            if (modal) {
-                modal.classList.add('show');
-                var input = document.getElementById('newTeamNameInput');
-                if (input) { input.value = '';
-                    setTimeout(function() { input.focus(); }, 100); }
-            }
+            document.getElementById('addTeamModal').classList.add('show');
+            document.getElementById('newTeamNameInput').value = '';
+            setTimeout(function() { document.getElementById('newTeamNameInput').focus(); }, 100);
         }
 
         function closeAddTeamModal() {
-            var modal = document.getElementById('addTeamModal');
-            if (modal) modal.classList.remove('show');
+            document.getElementById('addTeamModal').classList.remove('show');
         }
 
-        async function confirmAddTeam() {
-            console.log('✅ confirmAddTeam 被调用');
-
+        function confirmAddTeam() {
             var input = document.getElementById('newTeamNameInput');
-            if (!input) {
-                showToast('⚠️ 输入框未找到');
-                return;
-            }
-
             var name = input.value.trim();
-            if (!name) {
-                showToast('⚠️ 请输入团队名称');
-                return;
+            if (!name) { showToast('请输入名称'); return; }
+
+            var data = getAppData();
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].name === name) { showToast('名称已存在'); return; }
             }
 
-            var cache = getCachedData();
-            for (var i = 0; i < cache.teams.length; i++) {
-                if (cache.teams[i].name === name) {
-                    showToast('⚠️ 该名称已存在');
-                    return;
-                }
-            }
-
-            if (!isCloudReady) {
-                showToast('⚠️ 云开发未连接，请刷新页面');
-                return;
-            }
-
-            try {
-                var result = await addTeamToCloud(name);
-                if (result) {
-                    await syncFromCloud();
-                    closeAddTeamModal();
-                    showToast('✅ 团队 "' + name + '" 已创建');
-                }
-            } catch (e) {
-                showToast('⚠️ 创建失败: ' + e.message);
-            }
+            var newTeam = {
+                id: 'team_' + Date.now(),
+                name: name,
+                members: []
+            };
+            data.teams.push(newTeam);
+            data.currentTeamId = newTeam.id;
+            data.fillData[newTeam.id] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            data.versions[newTeam.id] = [];
+            saveAppData(data);
+            closeAddTeamModal();
+            showToast('✅ 已创建 "' + name + '"');
         }
 
         // ============================================================
-        //  ===== 成员操作 =====
+        //  删除团队
+        // ============================================================
+        var pendingDeleteTeamId = null;
+
+        function showDeleteTeamModal(teamId) {
+            pendingDeleteTeamId = teamId;
+            var team = getTeam(teamId);
+            if (team) {
+                document.getElementById('deleteTeamDetail').textContent = '将删除「' + team.name + '」及其所有数据，不可恢复！';
+            }
+            document.getElementById('deleteTeamModal').classList.add('show');
+        }
+
+        function closeDeleteTeamModal() {
+            document.getElementById('deleteTeamModal').classList.remove('show');
+            pendingDeleteTeamId = null;
+        }
+
+        function confirmDeleteTeam() {
+            if (!pendingDeleteTeamId) return;
+            deleteTeam(pendingDeleteTeamId);
+            closeDeleteTeamModal();
+        }
+
+        function deleteTeam(teamId) {
+            var data = getAppData();
+            var team = getTeam(teamId);
+            if (!team) { showToast('⚠️ 团队不存在'); return; }
+
+            var newTeams = [];
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id !== teamId) {
+                    newTeams.push(data.teams[i]);
+                }
+            }
+            data.teams = newTeams;
+            delete data.fillData[teamId];
+            delete data.versions[teamId];
+
+            if (data.currentTeamId === teamId) {
+                data.currentTeamId = data.teams.length > 0 ? data.teams[0].id : null;
+            }
+
+            saveAppData(data);
+            renderAll();
+            document.getElementById('qrcode').innerHTML = '';
+            document.getElementById('shareLink').value = '';
+            showToast('✅ 已删除');
+        }
+
+        // ============================================================
+        //  成员管理 - 核心修复
         // ============================================================
         function renderMembers() {
+            console.log('📋 renderMembers 被调用');
+            var data = getAppData();
             var team = getCurrentTeam();
             var members = team && team.members ? team.members : [];
             var container = document.getElementById('memberList');
-            if (!container) return;
+            if (!container) {
+                console.error('❌ memberList 元素未找到');
+                return;
+            }
 
             var countEl = document.getElementById('memberCount');
             if (countEl) countEl.textContent = members.length;
@@ -1226,47 +1128,75 @@
                     '</span>';
             }
             container.innerHTML = html;
+            console.log('✅ 成员列表已更新，共 ' + members.length + ' 人');
         }
 
-        async function addMember() {
+        function addMember() {
+            console.log('=== addMember 被调用 ===');
+
             var nameInput = document.getElementById('memberName');
             var genderSelect = document.getElementById('memberGender');
-            if (!nameInput || !genderSelect) { showToast('⚠️ 页面元素未加载'); return; }
+
+            if (!nameInput || !genderSelect) {
+                showToast('⚠️ 页面元素未加载');
+                return;
+            }
 
             var name = nameInput.value.trim();
             var gender = genderSelect.value;
-            if (!name) { showToast('⚠️ 请输入姓名');
-                nameInput.focus(); return; }
+
+            if (!name) {
+                showToast('⚠️ 请输入姓名');
+                nameInput.focus();
+                return;
+            }
 
             var team = getCurrentTeam();
-            if (!team) { showToast('⚠️ 未找到团队'); return; }
+            if (!team) {
+                showToast('⚠️ 请先创建团队');
+                return;
+            }
 
             var members = team.members || [];
             for (var i = 0; i < members.length; i++) {
-                if (members[i].name === name) { showToast('⚠️ 该成员已存在');
+                if (members[i].name === name) {
+                    showToast('⚠️ 该成员已存在');
                     nameInput.value = '';
-                    nameInput.focus(); return; }
+                    nameInput.focus();
+                    return;
+                }
             }
 
+            // 添加成员到团队
             members.push({ name: name, gender: gender });
 
-            try {
-                await updateTeamInCloud(team._id, { members: members });
-                var cache = getCachedData();
-                if (cache.lineups[team._id]) {
-                    delete cache.lineups[team._id];
-                    saveCache(cache);
+            // 直接更新团队数据
+            var data = getAppData();
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === team.id) {
+                    data.teams[i].members = members;
+                    break;
                 }
-                await syncFromCloud();
-                nameInput.value = '';
-                nameInput.focus();
-                showToast('✅ 已添加 ' + name);
-            } catch (e) {
-                showToast('⚠️ 添加失败: ' + e.message);
             }
+            data.fillData[team.id] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+
+            // 保存到 localStorage
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+            nameInput.value = '';
+            nameInput.focus();
+
+            // 强制刷新所有视图
+            renderTeams();
+            renderMembers();
+            renderFillPage();
+            renderVersions();
+
+            showToast('✅ 已添加 ' + name);
+            console.log('添加成功，当前成员数:', members.length);
         }
 
-        async function removeMember(name) {
+        function removeMember(name) {
             var team = getCurrentTeam();
             if (!team) return;
 
@@ -1280,42 +1210,43 @@
             if (!confirm('移除「' + name + '」？')) return;
             members.splice(index, 1);
 
-            try {
-                await updateTeamInCloud(team._id, { members: members });
-                var cache = getCachedData();
-                if (cache.lineups[team._id]) {
-                    delete cache.lineups[team._id];
-                    saveCache(cache);
+            var data = getAppData();
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === team.id) {
+                    data.teams[i].members = members;
+                    break;
                 }
-                await syncFromCloud();
-                showToast('已移除 ' + name);
-            } catch (e) {
-                showToast('⚠️ 移除失败: ' + e.message);
             }
+            data.fillData[team.id] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+            renderAll();
+            showToast('已移除 ' + name);
         }
 
-        async function clearTeamMembers() {
+        function clearTeamMembers() {
             var team = getCurrentTeam();
             if (!team) return;
             var members = team.members || [];
             if (members.length === 0) { showToast('暂无成员'); return; }
             if (!confirm('清空所有成员？')) return;
 
-            try {
-                await updateTeamInCloud(team._id, { members: [] });
-                var cache = getCachedData();
-                if (cache.lineups[team._id]) {
-                    delete cache.lineups[team._id];
-                    saveCache(cache);
+            team.members = [];
+            var data = getAppData();
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === team.id) {
+                    data.teams[i].members = [];
+                    break;
                 }
-                await syncFromCloud();
-                showToast('已清空');
-            } catch (e) {
-                showToast('⚠️ 清空失败: ' + e.message);
             }
+            data.fillData[team.id] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+            renderAll();
+            showToast('已清空');
         }
 
-        async function loadExample() {
+        function loadExampleMembers() {
             var team = getCurrentTeam();
             if (!team) return;
             var members = team.members || [];
@@ -1323,7 +1254,7 @@
                 if (!confirm('覆盖当前成员？')) return;
             }
 
-            var examples = [
+            team.members = [
                 { name: '张伟', gender: 'male' },
                 { name: '李娜', gender: 'female' },
                 { name: '王强', gender: 'male' },
@@ -1334,82 +1265,22 @@
                 { name: '周婷', gender: 'female' }
             ];
 
-            try {
-                await updateTeamInCloud(team._id, { members: examples });
-                var cache = getCachedData();
-                if (cache.lineups[team._id]) {
-                    delete cache.lineups[team._id];
-                    saveCache(cache);
+            var data = getAppData();
+            for (var i = 0; i < data.teams.length; i++) {
+                if (data.teams[i].id === team.id) {
+                    data.teams[i].members = team.members;
+                    break;
                 }
-                await syncFromCloud();
-                showToast('✅ 已加载示例');
-            } catch (e) {
-                showToast('⚠️ 加载失败: ' + e.message);
             }
+            data.fillData[team.id] = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+            renderAll();
+            showToast('✅ 已加载示例');
         }
 
         // ============================================================
-        //  ===== 删除团队 =====
-        // ============================================================
-        var pendingDeleteTeamId = null;
-
-        function showDeleteTeamModal(teamId) {
-            pendingDeleteTeamId = teamId;
-            var team = getTeamById(teamId);
-            var detail = document.getElementById('deleteTeamDetail');
-            if (detail && team) {
-                detail.textContent = '将删除「' + team.name + '」及其所有数据，不可恢复！';
-            }
-            document.getElementById('deleteTeamModal').classList.add('show');
-        }
-
-        function closeDeleteTeamModal() {
-            document.getElementById('deleteTeamModal').classList.remove('show');
-            pendingDeleteTeamId = null;
-        }
-
-        async function confirmDeleteTeam() {
-            if (!pendingDeleteTeamId) return;
-            await deleteTeam(pendingDeleteTeamId);
-            closeDeleteTeamModal();
-        }
-
-        async function deleteTeam(teamId) {
-            try {
-                await deleteTeamFromCloud(teamId);
-                await syncFromCloud();
-
-                var config = getConfig();
-                var cache = getCachedData();
-                if (cache.teams.length > 0 && config.currentTeamId === teamId) {
-                    config.currentTeamId = cache.teams[0]._id;
-                    saveConfig(config);
-                }
-
-                renderAll();
-                var qrContainer = document.getElementById('qrcode');
-                if (qrContainer) qrContainer.innerHTML = '';
-                var shareLink = document.getElementById('shareLink');
-                if (shareLink) shareLink.value = '';
-
-                showToast('✅ 已删除');
-            } catch (e) {
-                showToast('⚠️ 删除失败: ' + e.message);
-            }
-        }
-
-        function getTeamById(teamId) {
-            var cache = getCachedData();
-            for (var i = 0; i < cache.teams.length; i++) {
-                if (cache.teams[i]._id === teamId) {
-                    return cache.teams[i];
-                }
-            }
-            return null;
-        }
-
-        // ============================================================
-        //  ===== 排阵填报 =====
+        //  排阵填报（简化版）
         // ============================================================
         var selectedReplaceGender = null;
         var selectedFillPlayers = [];
@@ -1420,11 +1291,11 @@
 
             var team = getCurrentTeam();
             if (!team || !team.members || team.members.length === 0) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>请先在「成员管理」中添加成员</p></div>';
+                container.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>请先添加成员</p></div>';
                 return;
             }
 
-            var fillData = getTeamLineup(team._id);
+            var fillData = getFillData(team.id);
             if (fillData && fillData.completed) {
                 container.innerHTML = renderCompletedView(team, fillData);
                 return;
@@ -1439,7 +1310,7 @@
 
             if (allUsed && fillData && fillData.steps && fillData.steps.length > 0) {
                 fillData.completed = true;
-                saveLineupToCloud(team._id, fillData);
+                saveFillData(team.id, fillData);
                 container.innerHTML = renderCompletedView(team, fillData);
                 return;
             }
@@ -1590,7 +1461,7 @@
                 html += '<div class="empty-state"><div class="icon">🎉</div><p>所有队员都已上场！排阵完成</p></div>';
                 if (fillData) {
                     fillData.completed = true;
-                    saveLineupToCloud(team._id, fillData);
+                    saveFillData(team.id, fillData);
                 }
                 setTimeout(function() { renderFillPage(); }, 500);
             }
@@ -1615,7 +1486,7 @@
 
             var team = getCurrentTeam();
             if (team) {
-                var fillData = getTeamLineup(team._id);
+                var fillData = getFillData(team.id);
                 var grid = document.getElementById('fillMemberGrid');
                 if (grid) {
                     var availablePlayers = [];
@@ -1656,7 +1527,7 @@
             var team = getCurrentTeam();
             if (!team) return;
 
-            var fillData = getTeamLineup(team._id);
+            var fillData = getFillData(team.id);
             var isFirstStep = fillData ? fillData.steps.length === 0 : true;
 
             if (isFirstStep) {
@@ -1732,11 +1603,11 @@
             }
         }
 
-        async function confirmFillStep() {
+        function confirmFillStep() {
             var team = getCurrentTeam();
             if (!team) { showToast('⚠️ 未找到团队'); return; }
 
-            var fillData = getTeamLineup(team._id);
+            var fillData = getFillData(team.id);
             if (!fillData) {
                 fillData = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
             }
@@ -1818,17 +1689,13 @@
                 fillData.completed = true;
             }
 
-            try {
-                await saveLineupToCloud(team._id, fillData);
-                await syncFromCloud();
-                selectedFillPlayers = [];
-                selectedReplaceGender = null;
-                renderFillPage();
-                renderDataPage();
-                showToast('✅ 第 ' + stepNum + ' 步确认完成');
-            } catch (e) {
-                showToast('⚠️ 保存失败: ' + e.message);
-            }
+            saveFillData(team.id, fillData);
+            selectedFillPlayers = [];
+            selectedReplaceGender = null;
+
+            renderFillPage();
+            renderVersions();
+            showToast('✅ 第 ' + stepNum + ' 步确认完成');
         }
 
         function renderCompletedView(team, fillData) {
@@ -1862,184 +1729,258 @@
             }
             html += '</div>';
 
+            html += '<div class="mt-12 flex">';
+            html += '<button class="btn btn-success btn-sm" onclick="showSaveVersionModal()">💾 保存为版本</button>';
+            html += '<button class="btn btn-danger btn-sm" onclick="resetFillData()">🔄 重置重新填报</button>';
+            html += '</div>';
+
             return html;
         }
 
-        async function resetFillData() {
+        function resetFillData() {
             if (!confirm('确认重置当前团队的填报数据？')) return;
             var team = getCurrentTeam();
             if (!team) return;
 
             var fillData = { steps: [], currentCourt: [], usedPlayers: [], completed: false };
+            saveFillData(team.id, fillData);
+            selectedFillPlayers = [];
+            selectedReplaceGender = null;
 
-            try {
-                await saveLineupToCloud(team._id, fillData);
-                await syncFromCloud();
-                selectedFillPlayers = [];
-                selectedReplaceGender = null;
-                renderFillPage();
-                renderDataPage();
-                showToast('已重置');
-            } catch (e) {
-                showToast('⚠️ 重置失败: ' + e.message);
-            }
+            renderFillPage();
+            renderVersions();
+            showToast('已重置');
         }
 
         // ============================================================
-        //  ===== 数据导出 =====
+        //  版本管理
         // ============================================================
-        function renderDataPage() {
-            var container = document.getElementById('dataContainer');
+        function showSaveVersionModal() {
+            var team = getCurrentTeam();
+            if (!team) { showToast('请选择团队'); return; }
+
+            var fillData = getFillData(team.id);
+            if (!fillData || !fillData.steps || fillData.steps.length === 0) {
+                showToast('⚠️ 当前没有排阵数据可保存');
+                return;
+            }
+
+            document.getElementById('versionNoteInput').value = '';
+            document.getElementById('saveVersionModal').classList.add('show');
+            setTimeout(function() { document.getElementById('versionNoteInput').focus(); }, 100);
+        }
+
+        function closeSaveVersionModal() {
+            document.getElementById('saveVersionModal').classList.remove('show');
+        }
+
+        function confirmSaveVersion() {
+            var team = getCurrentTeam();
+            if (!team) { showToast('请选择团队'); return; }
+
+            var fillData = getFillData(team.id);
+            if (!fillData || !fillData.steps || fillData.steps.length === 0) {
+                showToast('⚠️ 没有排阵数据可保存');
+                closeSaveVersionModal();
+                return;
+            }
+
+            var note = document.getElementById('versionNoteInput').value.trim();
+            if (!note) {
+                var versions = getVersions(team.id);
+                note = '第 ' + (versions.length + 1) + ' 版';
+            }
+
+            addVersion(team.id, note, fillData);
+            closeSaveVersionModal();
+            renderVersions();
+            showToast('✅ 已保存版本: ' + note);
+        }
+
+        function addVersion(teamId, note, fillData) {
+            var versions = getVersions(teamId);
+            var version = {
+                id: 'v_' + Date.now(),
+                note: note,
+                steps: fillData.steps || [],
+                usedPlayers: fillData.usedPlayers || [],
+                currentCourt: fillData.currentCourt || [],
+                completed: fillData.completed || false,
+                createdAt: new Date().toISOString()
+            };
+            versions.push(version);
+            saveVersions(teamId, versions);
+            return version;
+        }
+
+        function renderVersions() {
+            var container = document.getElementById('versionContainer');
             if (!container) return;
 
             var team = getCurrentTeam();
             if (!team) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">📊</div><p>请选择团队</p></div>';
+                container.innerHTML = '<div class="empty-state"><div class="icon">📚</div><p>请选择团队</p></div>';
                 return;
             }
 
-            var fillData = getTeamLineup(team._id);
-            if (!fillData || !fillData.steps || fillData.steps.length === 0) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">📊</div><p>暂无填报数据</p></div>';
+            var versions = getVersions(team.id);
+            document.getElementById('versionCount').textContent = '共 ' + versions.length + ' 个版本';
+
+            if (versions.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📚</div><p>暂无历史版本</p></div>';
                 return;
             }
 
-            var updateTime = fillData.updatedAt ? new Date(fillData.updatedAt).toLocaleString() : '未知';
+            var html = '';
+            var sorted = versions.slice().reverse();
+            for (var i = 0; i < sorted.length; i++) {
+                var v = sorted[i];
+                var date = new Date(v.createdAt);
+                var dateStr = date.toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit',
+                    minute: '2-digit' });
 
-            var html = '<div class="data-update-banner">';
-            html += '<span class="msg">📋 <strong>' + team.name + '</strong> 的填报数据</span>';
-            html += '<span class="time">🕐 更新于：' + updateTime + '</span>';
-            html += '</div>';
-
-            html += '<div style="overflow-x:auto;">';
-            html += '<table class="data-table">';
-            html += '<thead><tr><th>步骤</th><th>动作</th><th>场上1</th><th>场上2</th><th>换下</th><th>换上</th></tr></thead>';
-            html += '<tbody>';
-            for (var i = 0; i < fillData.steps.length; i++) {
-                var s = fillData.steps[i];
-                var p1 = s.onCourt[0] ? s.onCourt[0].name + '(' + (s.onCourt[0].gender === 'male' ? '男' : '女') + ')' :
-                '';
-                var p2 = s.onCourt[1] ? s.onCourt[1].name + '(' + (s.onCourt[1].gender === 'male' ? '男' : '女') + ')' :
-                '';
-                html += '<tr>';
-                html += '<td>' + s.step + '</td>';
-                html += '<td>' + (s.action === '首发' ? '🌟 首发' : '🔄 换人') + '</td>';
-                html += '<td>' + p1 + '</td>';
-                html += '<td>' + p2 + '</td>';
-                html += '<td>' + (s.substitutedOut || '-') + '</td>';
-                html += '<td>' + (s.substitutedIn || '-') + '</td>';
-                html += '</tr>';
+                html += '<div class="version-item">';
+                html += '<div class="version-info">';
+                html += '<span class="version-time">📌 ' + v.note + '</span>';
+                html += '<span class="version-note">' + dateStr + ' · ' + v.steps.length + ' 步 · ' + v.usedPlayers
+                    .length + ' 人上场</span>';
+                html += '</div>';
+                html += '<div class="version-actions">';
+                html += '<button class="btn btn-sm btn-primary" onclick="viewVersion(\'' + v.id + '\')">👁 查看</button>';
+                html += '<button class="btn btn-sm btn-danger" onclick="deleteVersionConfirm(\'' + v.id + '\')">🗑</button>';
+                html += '</div>';
+                html += '</div>';
             }
-            html += '</tbody></table>';
-            html += '<div class="mt-12 text-muted">共 ' + fillData.steps.length + ' 步，' + fillData.usedPlayers.length +
-                ' 人已上场</div>';
-            html += '</div>';
+
             container.innerHTML = html;
         }
 
-        function exportFillDataCSV() {
+        var viewingVersionId = null;
+
+        function viewVersion(versionId) {
             var team = getCurrentTeam();
-            if (!team) { showToast('请选择团队'); return; }
+            if (!team) return;
 
-            var fillData = getTeamLineup(team._id);
-            if (!fillData || !fillData.steps || fillData.steps.length === 0) {
-                showToast('暂无数据');
-                return;
-            }
+            var version = getVersion(team.id, versionId);
+            if (!version) { showToast('版本不存在'); return; }
 
-            var csv = '团队,步骤,动作,场上1,场上2,换下,换上,时间\n';
-            var now = new Date().toLocaleString();
-            for (var i = 0; i < fillData.steps.length; i++) {
-                var s = fillData.steps[i];
-                var p1 = s.onCourt[0] ? s.onCourt[0].name : '';
-                var p2 = s.onCourt[1] ? s.onCourt[1].name : '';
-                csv += team.name + ',' + s.step + ',' + (s.action === '首发' ? '首发' : '换人') +
-                    ',' + p1 + ',' + p2 + ',' + (s.substitutedOut || '') + ',' + (s.substitutedIn || '') + ',' + now +
-                    '\n';
-            }
+            viewingVersionId = versionId;
+            document.getElementById('viewVersionTitle').textContent = '📋 ' + version.note;
 
-            var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-            var link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = '出场名单_' + team.name + '_' + new Date().toISOString().slice(0, 10) + '.csv';
-            link.click();
-            showToast('✅ CSV导出成功');
-        }
+            var html = '<div style="margin-bottom:12px;">';
+            html += '<p class="text-muted text-sm">保存于：' + new Date(version.createdAt).toLocaleString() + '</p>';
+            html += '<p class="text-muted text-sm">' + version.steps.length + ' 步 · ' + version.usedPlayers.length +
+                ' 人已上场</p>';
+            html += '</div>';
 
-        function exportFillDataJSON() {
-            var team = getCurrentTeam();
-            if (!team) { showToast('请选择团队'); return; }
-
-            var fillData = getTeamLineup(team._id);
-            if (!fillData || !fillData.steps || fillData.steps.length === 0) {
-                showToast('暂无数据');
-                return;
-            }
-
-            var data = {
-                team: team.name,
-                members: team.members,
-                fillData: fillData,
-                exportedAt: new Date().toISOString()
-            };
-
-            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            var link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = '出场名单_' + team.name + '_' + new Date().toISOString().slice(0, 10) + '.json';
-            link.click();
-            showToast('✅ JSON导出成功');
-        }
-
-        function exportAllData() {
-            var data = {
-                teams: getCachedData().teams,
-                lineups: getCachedData().lineups,
-                exportedAt: new Date().toISOString()
-            };
-            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            var link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = '全部数据_' + new Date().toISOString().slice(0, 10) + '.json';
-            link.click();
-            showToast('✅ 全部数据已导出');
-        }
-
-        function handleImport(event) {
-            var file = event.target.files[0];
-            if (!file) return;
-
-            var reader = new FileReader();
-            reader.onload = async function(e) {
-                try {
-                    var data = JSON.parse(e.target.result);
-                    if (data.teams) {
-                        if (confirm('导入将覆盖云端数据，确认？')) {
-                            showToast('⚠️ 请使用「同步」功能导入');
-                        }
-                    } else {
-                        showToast('⚠️ 无效文件');
-                    }
-                } catch (err) {
-                    showToast('⚠️ 解析失败');
-                    console.error(err);
+            for (var i = 0; i < version.steps.length; i++) {
+                var s = version.steps[i];
+                var courtHtml = '';
+                for (var j = 0; j < s.onCourt.length; j++) {
+                    var p = s.onCourt[j];
+                    courtHtml += '<span style="display:inline-block;padding:4px 14px;border-radius:12px;border:2px solid #4299e1;font-weight:600;font-size:13px;margin:2px;' +
+                        (p.gender === 'male' ? 'background:#ebf8ff;border-color:#4299e1;' :
+                            'background:#fff5f7;border-color:#ed64a6;') + '">' +
+                        p.name + ' ' + (p.gender === 'male' ? '♂' : '♀') + '</span>';
                 }
+                var actionText = s.action === '首发' ? '🌟 首发' : '⬇ ' + (s.substitutedOut || '') + ' → ⬆ ' + (s
+                    .substitutedIn || '');
+                html += '<div style="padding:10px 14px;margin-bottom:6px;background:#f7fafc;border-radius:10px;border-left:4px solid #4299e1;">';
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">';
+                html += '<span style="font-weight:700;font-size:14px;color:#2d3748;">第 ' + s.step + ' 步</span>';
+                html += '<span style="font-size:12px;color:#718096;">' + actionText + '</span>';
+                html += '</div>';
+                html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">' + courtHtml + '</div>';
+                html += '</div>';
+            }
+
+            document.getElementById('viewVersionContent').innerHTML = html;
+            document.getElementById('viewVersionModal').classList.add('show');
+        }
+
+        function closeViewVersionModal() {
+            document.getElementById('viewVersionModal').classList.remove('show');
+            viewingVersionId = null;
+        }
+
+        function restoreVersion() {
+            if (!viewingVersionId) return;
+            var team = getCurrentTeam();
+            if (!team) return;
+
+            var version = getVersion(team.id, viewingVersionId);
+            if (!version) { showToast('版本不存在'); return; }
+
+            if (!confirm('确认恢复此版本？将覆盖当前排阵数据。')) return;
+
+            var fillData = {
+                steps: version.steps.slice(),
+                currentCourt: version.currentCourt.slice(),
+                usedPlayers: version.usedPlayers.slice(),
+                completed: version.completed || false
             };
-            reader.readAsText(file);
-            event.target.value = '';
+
+            saveFillData(team.id, fillData);
+            selectedFillPlayers = [];
+            selectedReplaceGender = null;
+
+            closeViewVersionModal();
+            renderFillPage();
+            renderVersions();
+            showToast('✅ 已恢复版本: ' + version.note);
+        }
+
+        function deleteVersionConfirm(versionId) {
+            if (!confirm('确定删除此版本？')) return;
+            var team = getCurrentTeam();
+            if (!team) return;
+            deleteVersion(team.id, versionId);
+            showToast('已删除');
+        }
+
+        function deleteVersion(teamId, versionId) {
+            var versions = getVersions(teamId);
+            var filtered = [];
+            for (var i = 0; i < versions.length; i++) {
+                if (versions[i].id !== versionId) {
+                    filtered.push(versions[i]);
+                }
+            }
+            saveVersions(teamId, filtered);
+            renderVersions();
+        }
+
+        function getVersion(teamId, versionId) {
+            var versions = getVersions(teamId);
+            for (var i = 0; i < versions.length; i++) {
+                if (versions[i].id === versionId) {
+                    return versions[i];
+                }
+            }
+            return null;
+        }
+
+        function clearAllVersions() {
+            var team = getCurrentTeam();
+            if (!team) return;
+            var versions = getVersions(team.id);
+            if (versions.length === 0) { showToast('暂无版本'); return; }
+            if (!confirm('确定清空所有历史版本？')) return;
+            saveVersions(team.id, []);
+            renderVersions();
+            showToast('已清空所有版本');
         }
 
         // ============================================================
-        //  ===== 二维码 =====
+        //  二维码
         // ============================================================
         function generateShareQR() {
             var team = getCurrentTeam();
             if (!team) { showToast('请选择团队'); return; }
 
-            var fillData = getTeamLineup(team._id);
-
+            var fillData = getFillData(team.id);
             var shareData = {
-                teamId: team._id,
+                teamId: team.id,
                 teamName: team.name,
                 members: team.members || [],
                 fillData: fillData || { steps: [], currentCourt: [], usedPlayers: [], completed: false },
@@ -2049,9 +1990,7 @@
             var encoded = encodeURIComponent(JSON.stringify(shareData));
             var url = window.location.origin + window.location.pathname + '?fill=' + encoded;
 
-            var linkInput = document.getElementById('shareLink');
-            if (linkInput) linkInput.value = url;
-
+            document.getElementById('shareLink').value = url;
             var container = document.getElementById('qrcode');
             if (!container) return;
             container.innerHTML = '';
@@ -2086,7 +2025,47 @@
         }
 
         // ============================================================
-        //  ===== 扫码填报模式 =====
+        //  导入导出
+        // ============================================================
+        function exportAllData() {
+            var data = getAppData();
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '排兵布阵_数据_' + new Date().toISOString().slice(0, 10) + '.json';
+            link.click();
+            showToast('✅ 全部数据已导出');
+        }
+
+        function handleImport(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var data = JSON.parse(e.target.result);
+                    if (data.teams && data.currentTeamId !== undefined) {
+                        if (!data.versions) data.versions = {};
+                        if (confirm('导入将覆盖当前所有数据，确认？')) {
+                            saveAppData(data);
+                            renderAll();
+                            showToast('✅ 导入成功');
+                        }
+                    } else {
+                        showToast('⚠️ 无效文件');
+                    }
+                } catch (err) {
+                    showToast('⚠️ 解析失败');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ============================================================
+        //  扫码填报模式（队长端）
         // ============================================================
         function initFillMode() {
             var params = new URLSearchParams(window.location.search);
@@ -2416,7 +2395,7 @@
             }
         }
 
-        async function captainConfirmStep() {
+        function captainConfirmStep() {
             var team = captainTeamData;
             if (!team) { showToast('⚠️ 数据错误，请重新扫码'); return; }
 
@@ -2493,24 +2472,31 @@
                 fillData.completed = true;
             }
 
-            try {
-                await saveLineupToCloud(team.teamId, fillData);
-                captainSelected = [];
-                captainSelectedGender = null;
-                showToast('✅ 第 ' + stepNum + ' 步确认完成');
+            var appData = getAppData();
+            var targetTeam = null;
+            for (var i = 0; i < appData.teams.length; i++) {
+                if (appData.teams[i].id === team.teamId) { targetTeam = appData.teams[i]; break; }
+            }
+            if (targetTeam) {
+                appData.fillData[team.teamId] = fillData;
+                saveAppData(appData);
+            }
 
-                var params = new URLSearchParams(window.location.search);
-                var fillParam = params.get('fill');
-                if (fillParam) {
+            captainSelected = [];
+            captainSelectedGender = null;
+            showToast('✅ 第 ' + stepNum + ' 步确认完成');
+
+            var params = new URLSearchParams(window.location.search);
+            var fillParam = params.get('fill');
+            if (fillParam) {
+                try {
                     var data = JSON.parse(decodeURIComponent(fillParam));
                     data.fillData = fillData;
                     var encoded = encodeURIComponent(JSON.stringify(data));
                     window.location.href = window.location.pathname + '?fill=' + encoded;
-                } else {
+                } catch (e) {
                     location.reload();
                 }
-            } catch (e) {
-                showToast('⚠️ 保存失败: ' + e.message);
             }
         }
 
@@ -2555,60 +2541,147 @@
         }
 
         // ============================================================
-        //  ===== 初始化 =====
+        //  绑定所有按钮事件（使用 addEventListener）
         // ============================================================
+        function bindEvents() {
+            console.log('🔗 绑定事件...');
 
-        async function init() {
-            console.log('🚀 初始化开始...');
+            // 新建团队
+            document.getElementById('addTeamBtn').addEventListener('click', showAddTeamModal);
+            document.getElementById('confirmTeamBtn').addEventListener('click', confirmAddTeam);
+            document.getElementById('closeTeamBtn').addEventListener('click', closeAddTeamModal);
 
-            // 初始化云开发
-            initCloud();
+            // 添加成员 - 核心
+            document.getElementById('addMemberBtn').addEventListener('click', function(e) {
+                console.log('点击添加成员按钮');
+                addMember();
+            });
 
-            // 检查扫码填报模式
-            var isFillMode = initFillMode();
+            // 回车添加成员
+            document.getElementById('memberName').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addMember();
+                }
+            });
 
-            if (!isFillMode) {
-                renderAll();
-                console.log('✅ 系统初始化完成 - 管理员模式');
-            } else {
-                console.log('✅ 系统初始化完成 - 扫码填报模式');
-            }
+            // 示例数据
+            document.getElementById('loadExampleBtn').addEventListener('click', loadExampleMembers);
+
+            // 清空成员
+            document.getElementById('clearMembersBtn').addEventListener('click', clearTeamMembers);
+
+            // Tab切换
+            document.querySelectorAll('.tab').forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+
+            // 重置排阵
+            document.getElementById('resetFillBtn').addEventListener('click', resetFillData);
+
+            // 保存版本
+            document.getElementById('saveVersionBtn').addEventListener('click', showSaveVersionModal);
+            document.getElementById('confirmSaveVersionBtn').addEventListener('click', confirmSaveVersion);
+            document.getElementById('cancelSaveVersionBtn').addEventListener('click', closeSaveVersionModal);
+
+            // 清空版本
+            document.getElementById('clearVersionsBtn').addEventListener('click', clearAllVersions);
+
+            // 查看版本弹窗
+            document.getElementById('closeViewBtn').addEventListener('click', closeViewVersionModal);
+            document.getElementById('closeViewBtn2').addEventListener('click', closeViewVersionModal);
+            document.getElementById('restoreVersionBtn').addEventListener('click', restoreVersion);
+
+            // 删除团队
+            document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDeleteTeam);
+            document.getElementById('closeDeleteBtn').addEventListener('click', closeDeleteTeamModal);
+
+            // 二维码
+            document.getElementById('generateQRBtn').addEventListener('click', generateShareQR);
+            document.getElementById('copyShareBtn').addEventListener('click', copyShareLink);
+
+            // 导出导入
+            document.getElementById('exportBtn').addEventListener('click', exportAllData);
+            document.getElementById('importBtn').addEventListener('click', function() {
+                document.getElementById('importFile').click();
+            });
+            document.getElementById('importFile').addEventListener('change', handleImport);
+
+            // 新建团队弹窗回车
+            document.getElementById('newTeamNameInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    confirmAddTeam();
+                }
+            });
+
+            // 保存版本弹窗回车
+            document.getElementById('versionNoteInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    confirmSaveVersion();
+                }
+            });
+
+            // 点击弹窗外部关闭
+            document.getElementById('addTeamModal').addEventListener('click', function(e) {
+                if (e.target === this) closeAddTeamModal();
+            });
+            document.getElementById('deleteTeamModal').addEventListener('click', function(e) {
+                if (e.target === this) closeDeleteTeamModal();
+            });
+            document.getElementById('saveVersionModal').addEventListener('click', function(e) {
+                if (e.target === this) closeSaveVersionModal();
+            });
+            document.getElementById('viewVersionModal').addEventListener('click', function(e) {
+                if (e.target === this) closeViewVersionModal();
+            });
+
+            console.log('✅ 所有事件绑定完成');
         }
 
-        // 暴露全局函数
-        window.confirmAddTeam = confirmAddTeam;
-        window.showAddTeamModal = showAddTeamModal;
-        window.closeAddTeamModal = closeAddTeamModal;
-        window.confirmDeleteTeam = confirmDeleteTeam;
-        window.closeDeleteTeamModal = closeDeleteTeamModal;
-        window.showDeleteTeamModal = showDeleteTeamModal;
-        window.addMember = addMember;
-        window.removeMember = removeMember;
-        window.clearTeamMembers = clearTeamMembers;
-        window.loadExample = loadExample;
-        window.switchTeam = switchTeam;
-        window.switchTab = switchTab;
-        window.resetFillData = resetFillData;
-        window.selectFillPlayer = selectFillPlayer;
-        window.selectReplaceGender = selectReplaceGender;
-        window.confirmFillStep = confirmFillStep;
-        window.generateShareQR = generateShareQR;
-        window.copyShareLink = copyShareLink;
-        window.exportFillDataCSV = exportFillDataCSV;
-        window.exportFillDataJSON = exportFillDataJSON;
-        window.exportAllData = exportAllData;
-        window.handleImport = handleImport;
-        window.syncFromCloud = syncFromCloud;
-        window.renderDataPage = renderDataPage;
-        window.renderFillPage = renderFillPage;
-        window.renderMembers = renderMembers;
-        window.renderTeams = renderTeams;
-        window.captainSelectGender = captainSelectGender;
-        window.captainSelectPlayer = captainSelectPlayer;
-        window.captainConfirmStep = captainConfirmStep;
+        // ============================================================
+        //  初始化
+        // ============================================================
 
-        // 启动
-        init();
+        // 检测URL加载数据
+        function loadDataFromURL() {
+            var params = new URLSearchParams(window.location.search);
+            var loadData = params.get('load');
+            if (loadData) {
+                try {
+                    var decoded = decodeURIComponent(loadData);
+                    var data = JSON.parse(decoded);
+                    if (data.teams && data.currentTeamId !== undefined) {
+                        if (!data.versions) data.versions = {};
+                        if (confirm('检测到数据链接，是否导入？\n\n将覆盖当前所有数据！')) {
+                            saveAppData(data);
+                            showToast('✅ 数据已从链接导入');
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                            renderAll();
+                            return true;
+                        } else {
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                        }
+                    }
+                } catch (e) { console.error('解析失败:', e); }
+            }
+            return false;
+        }
+
+        var dataLoaded = loadDataFromURL();
+        var isFillMode = initFillMode();
+
+        if (!isFillMode) {
+            renderAll();
+            bindEvents();
+            console.log('✅ 系统初始化完成 - 多版本记录模式');
+            if (dataLoaded) console.log('✅ 已从URL加载数据');
+        } else {
+            console.log('✅ 扫码填报模式');
+        }
     </script>
 
 </body>
